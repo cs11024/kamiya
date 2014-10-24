@@ -1,0 +1,33 @@
+@* login Template File *@
+@(form: Form[Application.Login])
+@if(form.hasGlobalErrors) {
+    <p class="error">
+        @form.globalError.message
+    </p>
+}
+<html>
+    <head>
+        <title>Zentasks</title>
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/login.css")">
+    </head>
+    <body>
+        <header>
+            <a href="@routes.Application.index" id="logo"><span>Zen</span>tasks</a>
+        </header>
+    
+    </body>
+</html>
+@helper.form(routes.Application.authenticate) {
+   <h1>Sign in</h1>
+
+   <p>
+       <input type="id" name="id" placeholder="Id" value="@form("id").value">
+   </p>
+   <p>
+       <input type="password" name="password" placeholder="Password">
+   </p>
+   <p>
+       <button type="submit">Login</button>
+   </p>
+}

@@ -1,0 +1,30 @@
+@* top Template File *@
+@(title: String, message: String, myform: Form[Application.MyForm])
+@import helper._
+
+@main(title) {
+	
+	<h1>@title</h1>
+	<p>@message</p>
+	@form(action = routes.Application.sendform) {
+		
+		@inputText(
+			field = myform("id"),
+			args = '_label -> "ID"
+		)
+		
+		<FORM ACTION="test3.pl" METHOD="post" ENCTYPE="multipart/form-data">
+ 			<input type = "text" NAME="filename"><BR>
+			<input type = "file" NAME="upfile"><BR>
+			<input type = "submit">
+			<input type = "reset" VALUE="取消">
+		</FORM>
+		
+		<input type = "submit">
+		
+
+	}
+	
+    @*play20.welcome(message, style = "Java")*@
+
+}
