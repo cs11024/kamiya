@@ -1,14 +1,14 @@
 @* top Template File *@
-@(title: String, message: String, myform: Form[Application.MyForm])
+@(title: String, user: String, myform: Form[Application.MyForm])
 @import helper._
 
 @main(title) {
 	
-	<h1>@title</h1>
-	<p>@message</p>
+	<h1>Kamiya System</h1>
+	<p>@user さんようこそ</p>
 	@form(action = routes.Application.sendform) {
 		
-		@inputText(
+		@*inputText(
 			field = myform("id"),
 			args = '_label -> "ID"
 		)
@@ -18,10 +18,15 @@
 			<input type = "file" NAME="upfile"><BR>
 			<input type = "submit">
 			<input type = "reset" VALUE="取消">
+		</FORM>*@
+		
+		@*<FORM ACTION="test3.pl" METHOD="post" ENCTYPE="multipart/form-data">
+ 			<input type = "text" NAME="filename"><BR>
+			<input type = "file" NAME="upfile"><BR>
 		</FORM>
-		
-		<input type = "submit">
-		
+		<input type = "submit">*@
+		<a href="@routes.Application.check" id="logo">プログラムチェック</a><BR>
+		<a href="@routes.Application.record" id="logo">履歴</a><BR>
 
 	}
 	

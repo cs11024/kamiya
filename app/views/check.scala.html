@@ -1,0 +1,61 @@
+@* check Template File *@
+@(user: String)
+
+@*(param: Any)*@
+
+<html>
+    <head>
+        <title>Kamiya System</title>
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/login.css")">
+    </head>
+    <body>
+        <header>
+            <a href="@routes.Application.index" id="logo">トップページへ戻る</a>
+        </header>
+        
+        <h1>Kamiya System</h1>
+    	<p>@user さんチェックページ</p>
+    	<!-- <form>
+    		<select size = "1" name = "kadai">
+    			<option value = "kadai1">課題1</option>
+    			<option value = "kadai2">課題2</option>
+    			<option value = "kadai3">課題3</option>
+    		</select>
+    	</form>
+        <FORM ACTION="test3.pl" METHOD="POST" ENCTYPE="multipart/form-data">
+ 			<input type = "text" NAME="filename"><BR>
+			<input type = "file" NAME="upfile"><BR>
+		</FORM>
+		<input type = "submit"> -->
+    </body>
+</html>
+
+<!-- <FORM METHOD="post" ENCTYPE="multipart/form-data" action="@{routes.Application.checker}">
+    アップロードファイル名：<INPUT TYPE="file" NAME="upfile"><BR>
+    <INPUT TYPE="submit" VALUE="送る">
+    <INPUT TYPE="reset" VALUE="取消">
+</FORM> -->
+
+@*helper.form(action = routes.Application.checker, 'enctype -> "multipart/form-data"){
+		<input type="file" name="checkf">
+	<p>
+		<input type="submit">
+	</p>
+}*@
+
+@helper.form(action = routes.Application.checker, 'enctype -> "multipart/form-data"){
+	<p>
+		<select size = "1" name = "kadai">
+			<option value = "kadai1">課題1</option>
+			<option value = "kadai2">課題2</option>
+			<option value = "kadai3">課題3</option>
+		</select>
+	</p>
+	<p>
+		<input type="file" name="checkf">
+	</p>
+	<p>
+		<input type="submit">
+	</p>
+}

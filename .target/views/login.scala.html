@@ -7,13 +7,13 @@
 }
 <html>
     <head>
-        <title>Zentasks</title>
+        <title>Kamiya System</title>
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/login.css")">
     </head>
     <body>
         <header>
-            <a href="@routes.Application.index" id="logo"><span>Zen</span>tasks</a>
+            <a href="@routes.Application.index" id="logo">トップページへ戻る</a>
         </header>
     
     </body>
@@ -21,12 +21,15 @@
 @helper.form(routes.Application.authenticate) {
    <h1>Sign in</h1>
 
+ <!-- @helper.inputText(form("id")) -->
+ <!-- @helper.inputPassword(form("password")) -->
    <p>
        <input type="id" name="id" placeholder="Id" value="@form("id").value">
    </p>
    <p>
        <input type="password" name="password" placeholder="Password">
    </p>
+
    <p>
        <button type="submit">Login</button>
    </p>

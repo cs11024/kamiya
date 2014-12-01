@@ -11,5 +11,17 @@ POST	/login						controllers.Application.authenticate()
 
 POST	/sendform					controllers.Application.sendform()
 
+GET		/check						controllers.Application.check()
+
+POST	/check						controllers.Application.checker()
+
+GET		/result						controllers.Application.result()
+
+GET		/record						controllers.Application.record()
+
+#POST	/result						controllers.Application.result()
+
+#GET		/sendform					controllers.Application.sendform()
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
