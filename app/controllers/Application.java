@@ -125,22 +125,65 @@ public class Application extends Controller {
 		}*/
 		if (checkf != null) {
 			String fileName = checkf.getFilename();
-			String contentType = checkf.getContentType(); 
-			File file = checkf.getFile();
-			System.out.println(fileName);
 			int point = fileName.lastIndexOf(".");
 			if (point != -1) {
 				String fname = fileName.substring(0, point);
 				String extension = fileName.substring(point + 1);
-				System.out.println(fname);
 				if (extension.equals("java")) {
+					File getfile = checkf.getFile();
+					File writefile = new File(fileName);
 					try {
+						FileReader filereader = new FileReader(getfile);
+						FileWriter filewriter = new FileWriter(writefile);
+						int ch = filereader.read();
+						while (ch != -1) {
+							System.out.print((char)ch);
+							filewriter.write((char)ch);
+							ch = filereader.read();
+						}
+						filereader.close();
+						filewriter.close();
+					} catch (FileNotFoundException e) {
+						System.out.println(e);
+					} catch (IOException e) {
+						System.out.println(e);
+					}
+					
+					ProcessBuilder compile = new ProcessBuilder("javac", fileName);
+					try {
+						Process processc = compile.start();
+						int ret = processc.waitFor();
+						System.out.println("compile exited with value: " + ret);
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 						//System.out.println(Runtime.getRuntime().exec("javac " + fileName).getOutputStream().toString());
-						Runtime.getRuntime().exec("javac " + fileName);
-						//ProcessBuilder builder = new ProcessBuilder("java", fname);
-						ProcessBuilder builder = new ProcessBuilder("java", "-version");
-			            Process process = builder.start();
-			            InputStream stream = process.getErrorStream();
+						/*Runtime.getRuntime().exec("javac " + fileName);
+						Runtime.getRuntime().exec("java " + fname);*/
+						//Process pro = Runtime.getRuntime().exec("java " + fname);
+						//System.out.println(pro.getInputStream());
+						//System.out.println(Runtime.getRuntime().exec("java " + fname).getOutputStream().toString());
+						//ProcessBuilder builder = new ProcessBuilder("java", "-version");
+					ProcessBuilder exec = new ProcessBuilder("java", fname);
+					try {
+			            Process processe = exec.start();
+			            InputStream stdIn = processe.getInputStream();
+			            InputStream errIn = processe.getErrorStream();
+			            int c;
+			            while ((c = stdIn.read()) != -1) {
+			            	System.out.print((char)c);
+			            }
+			            stdIn.close();
+			            while ((c = errIn.read()) != -1) {
+			            	System.out.print((char)c);
+			            }
+			            errIn.close();
+			            System.out.println();
+			            int ret = processe.waitFor();
+			            System.out.println("execute exited with value: " + ret);
+			            /*InputStream stream = process.getErrorStream();
 			            while (true) {
 			                int c = stream.read();
 			                if (c == -1) {
@@ -148,19 +191,18 @@ public class Application extends Controller {
 			                    break;
 			                }
 			                System.out.print((char)c);
-			            }
-					} catch (IOException ex) {
-						ex.printStackTrace();
+			            }*/
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 					return redirect(routes.Application.result());
 				}
 			}
-			flash("error", "Missing file");
-			return redirect(routes.Application.index());
-		} else {
-			flash("error", "Missing file");
-			return redirect(routes.Application.index());    
 		}
+		flash("error", "ファイルない");
+		return redirect(routes.Application.index());    
 		//return redirect(routes.Application.result());
 	}
 	
