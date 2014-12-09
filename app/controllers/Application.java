@@ -2,7 +2,7 @@ package controllers;
 
 import java.util.List;
 import java.util.Map;
-
+import java.util.*;
 import play.db.ebean.Model.Finder;
 import models.User;
 import play.*;
@@ -116,6 +116,8 @@ public class Application extends Controller {
 		MultipartFormData body = request().body().asMultipartFormData();
 		FilePart checkf = body.getFile("checkf");
 		String kadai = body.asFormUrlEncoded().get("kadai")[0];
+		int num = Integer.parseInt(kadai.substring(5));
+		System.out.println(num);
 		System.out.println(kadai);
 		/*try {
 			System.out.println(Runtime.getRuntime().exec("dir").getOutputStream().toString());
@@ -130,6 +132,7 @@ public class Application extends Controller {
 				String fname = fileName.substring(0, point);
 				String extension = fileName.substring(point + 1);
 				if (extension.equals("java")) {
+					/*学習者プログラムをローカルに保存*/
 					File getfile = checkf.getFile();
 					File writefile = new File(fileName);
 					try {
@@ -149,6 +152,7 @@ public class Application extends Controller {
 						System.out.println(e);
 					}
 					
+					/*学習者プログラムをコンパイル*/
 					ProcessBuilder compile = new ProcessBuilder("javac", fileName);
 					try {
 						Process processc = compile.start();
@@ -166,7 +170,11 @@ public class Application extends Controller {
 						//System.out.println(pro.getInputStream());
 						//System.out.println(Runtime.getRuntime().exec("java " + fname).getOutputStream().toString());
 						//ProcessBuilder builder = new ProcessBuilder("java", "-version");
-					ProcessBuilder exec = new ProcessBuilder("java", fname);
+					
+					/*学習者プログラムをリダイレクション実行*/
+					int i = 1;
+					//while () {
+					ProcessBuilder exec = new ProcessBuilder("cmd", "/c", "java", fname, "<", "test.txt", ">", "stu"+ num +"_"+ i +".txt");
 					try {
 			            Process processe = exec.start();
 			            InputStream stdIn = processe.getInputStream();
@@ -197,13 +205,76 @@ public class Application extends Controller {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+					//i++;
+					//}
+					
+					/*正解結果と学習者プログラムを比較*/
+					BufferedReader br1 = null;
+					BufferedReader br2 = null;
+					try {
+						br1 = new BufferedReader(new InputStreamReader(new FileInputStream("seikai.txt")));
+						br2 = new BufferedReader(new InputStreamReader(new FileInputStream("stu1_1.txt")));
+						StringBuffer sb1 = new StringBuffer();
+						StringBuffer sb2 = new StringBuffer();
+						int c1, c2;
+						while ((c1 = br1.read()) != -1) {
+							sb1.append((char) c1);
+						}
+						while ((c2 = br2.read()) != -1) {
+							sb2.append((char) c2);
+						}
+						String seikai = sb1.toString();
+						String kekka = sb2.toString();
+						System.out.println(seikai);
+						System.out.println(kekka);
+						
+						String line = br2.readLine();
+						StringTokenizer st1 = new StringTokenizer(seikai);
+						int index = 0;
+						while (st1.hasMoreTokens()) {
+							String token = st1.nextToken();
+							if (line.indexOf(token) != -1) {
+								index = kekka.indexOf(token);
+								if (!st1.hasMoreTokens()) {
+									System.out.println("正解だよ");
+									/*データベース保存*/
+								}
+							} else {
+								System.out.println("だめだよ");
+								/*データベース保存*/
+							}
+						}
+						/*StringTokenizer st1 = new StringTokenizer(seikai);
+						int index = 0;
+						while (st1.hasMoreTokens()) {
+							String token = st1.nextToken();
+							if (kekka.indexOf(token) != -1 && kekka.indexOf(token) > index) {
+								index = kekka.indexOf(token);
+								if (!st1.hasMoreTokens()) {
+									System.out.println("正解だよ");
+									//データベース保存
+								}
+							} else {
+								System.out.println("だめだよ");
+								//データベース保存
+							}
+						}*/
+						br1.close();
+						br2.close();
+					} catch (FileNotFoundException e) {
+						System.out.println(e);
+					} catch (IOException e) {
+						System.out.println(e);
+					} catch (Exception e) {
+						System.out.println(e);
+					}
+					
 					return redirect(routes.Application.result());
 				}
 			}
 		}
 		flash("error", "ファイルない");
 		return redirect(routes.Application.index());    
-		//return redirect(routes.Application.result());
 	}
 	
 	public static Result result() {
