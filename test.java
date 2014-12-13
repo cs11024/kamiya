@@ -9,16 +9,17 @@ public class test {
         x = Integer.parseInt(buf);
         buf = br.readLine();
         y = Integer.parseInt(buf);
-        System.out.println("" + x + " - " + y + " = " + (x - y) );
+        //System.out.println("" + x + " - " + y + " = " + (x - y) );
+        System.out.println(x - y);
         buf = br.readLine();
         x = Integer.parseInt(buf);
         buf = br.readLine();
         y = Integer.parseInt(buf);
-        System.out.println("" + x + " - " + y + " = " + (x - y) );
+        System.out.println(x - y);
         buf = br.readLine();
         x = Integer.parseInt(buf);
         buf = br.readLine();
         y = Integer.parseInt(buf);
-        System.out.println("" + x + " - " + y + " = " + (x - y) );
+        System.out.println(x - y);
 	}
 }

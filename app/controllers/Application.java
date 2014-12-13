@@ -1,8 +1,7 @@
 package controllers;
 
-import java.util.List;
-import java.util.Map;
 import java.util.*;
+
 import play.db.ebean.Model.Finder;
 import models.User;
 import play.*;
@@ -100,6 +99,17 @@ public class Application extends Controller {
         return ok(check.render(user));
     }
 	
+	public static FilenameFilter getFileRegexFilter(String start, String end) {  
+		final String start_ = start;
+		final String end_ = end;
+		return new FilenameFilter() {  
+			public boolean accept(File file, String name) {  
+				boolean ret = name.startsWith(start_) && name.endsWith(end_);   
+				return ret;  
+			}  
+		};  
+	}
+	
 	/*public static Result checker() {
 		String user = session("id");
 		Form<Check> checkform = form(Check.class).bindFromRequest();
@@ -172,25 +182,28 @@ public class Application extends Controller {
 						//ProcessBuilder builder = new ProcessBuilder("java", "-version");
 					
 					/*学習者プログラムをリダイレクション実行*/
-					int i = 1;
 					//while () {
-					ProcessBuilder exec = new ProcessBuilder("cmd", "/c", "java", fname, "<", "test.txt", ">", "stu"+ num +"_"+ i +".txt");
-					try {
-			            Process processe = exec.start();
-			            InputStream stdIn = processe.getInputStream();
-			            InputStream errIn = processe.getErrorStream();
-			            int c;
-			            while ((c = stdIn.read()) != -1) {
-			            	System.out.print((char)c);
-			            }
-			            stdIn.close();
-			            while ((c = errIn.read()) != -1) {
-			            	System.out.print((char)c);
-			            }
-			            errIn.close();
-			            System.out.println();
-			            int ret = processe.waitFor();
-			            System.out.println("execute exited with value: " + ret);
+					File testfile = new File(".");  
+				    File[] testFiles = testfile.listFiles(getFileRegexFilter("test" + num + "_", ".txt"));
+				    for (int i = 0; i < testFiles.length; i++) {
+				    	//System.out.println("ファイル" + (in+1) + "→" + testFiles[in]);
+				    	ProcessBuilder exec = new ProcessBuilder("cmd", "/c", "java", fname, "<", testFiles[i].getName(), ">", "stu"+ num +"_"+ (i+1) +".txt");
+				    	try {
+				    		Process processe = exec.start();
+				    		InputStream stdIn = processe.getInputStream();
+				    		InputStream errIn = processe.getErrorStream();
+				    		int c;
+				    		while ((c = stdIn.read()) != -1) {
+				    			System.out.print((char)c);
+				    		}
+				    		stdIn.close();
+				    		while ((c = errIn.read()) != -1) {
+				    			System.out.print((char)c);
+				    		}
+				    		errIn.close();
+				    		System.out.println();
+				    		int ret = processe.waitFor();
+				    		System.out.println("execute exited with value: " + ret);
 			            /*InputStream stream = process.getErrorStream();
 			            while (true) {
 			                int c = stream.read();
@@ -200,76 +213,102 @@ public class Application extends Controller {
 			                }
 			                System.out.print((char)c);
 			            }*/
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					//i++;
-					//}
+				    	} catch (IOException e) {
+				    		e.printStackTrace();
+				    	} catch (InterruptedException e) {
+				    		e.printStackTrace();
+				    	}
+				    }
 					
 					/*正解結果と学習者プログラムを比較*/
-					BufferedReader br1 = null;
-					BufferedReader br2 = null;
-					try {
-						br1 = new BufferedReader(new InputStreamReader(new FileInputStream("seikai.txt")));
-						br2 = new BufferedReader(new InputStreamReader(new FileInputStream("stu1_1.txt")));
-						StringBuffer sb1 = new StringBuffer();
-						StringBuffer sb2 = new StringBuffer();
-						int c1, c2;
-						while ((c1 = br1.read()) != -1) {
-							sb1.append((char) c1);
-						}
-						while ((c2 = br2.read()) != -1) {
-							sb2.append((char) c2);
-						}
-						String seikai = sb1.toString();
-						String kekka = sb2.toString();
-						System.out.println(seikai);
-						System.out.println(kekka);
-						
-						String line = br2.readLine();
-						StringTokenizer st1 = new StringTokenizer(seikai);
-						int index = 0;
-						while (st1.hasMoreTokens()) {
-							String token = st1.nextToken();
-							if (line.indexOf(token) != -1) {
-								index = kekka.indexOf(token);
-								if (!st1.hasMoreTokens()) {
-									System.out.println("正解だよ");
-									/*データベース保存*/
-								}
-							} else {
-								System.out.println("だめだよ");
-								/*データベース保存*/
-							}
-						}
-						/*StringTokenizer st1 = new StringTokenizer(seikai);
-						int index = 0;
-						while (st1.hasMoreTokens()) {
-							String token = st1.nextToken();
-							if (kekka.indexOf(token) != -1 && kekka.indexOf(token) > index) {
-								index = kekka.indexOf(token);
-								if (!st1.hasMoreTokens()) {
-									System.out.println("正解だよ");
-									//データベース保存
-								}
-							} else {
-								System.out.println("だめだよ");
-								//データベース保存
-							}
+				    String[] stringArray;
+				    String[] feedbacks;
+				    File teachfile = new File(".");  
+				    File[] teachFiles = teachfile.listFiles(getFileRegexFilter("teach" + num + "_", ".txt"));
+				    File stufile = new File(".");  
+				    File[] stuFiles = stufile.listFiles(getFileRegexFilter("stu" + num + "_", ".txt"));
+				    stringArray = new String[teachFiles.length];
+				    feedbacks = new String[teachFiles.length];
+				    for (int i = 0; i < teachFiles.length; i++) {   
+				    	BufferedReader br1 = null;
+				    	BufferedReader br2 = null;
+				    	System.out.println("ファイル" + (i+1) + "→" + teachFiles[i]);
+				    	System.out.println("ファイル" + (i+1) + "→" + stuFiles[i]);
+				    	try {
+				    		br1 = new BufferedReader(new InputStreamReader(new FileInputStream(teachFiles[i].getName())));
+				    		br2 = new BufferedReader(new InputStreamReader(new FileInputStream(stuFiles[i].getName())));
+				    		StringBuffer sb1 = new StringBuffer();
+				    		StringBuffer sb2 = new StringBuffer();
+				    		int c1, c2;
+				    		while ((c1 = br1.read()) != -1) {
+				    			sb1.append((char) c1);
+				    		}
+				    		while ((c2 = br2.read()) != -1) {
+				    			sb2.append((char) c2);
+				    		}
+				    		String teacher = sb1.toString();
+				    		String student = sb2.toString();
+				    		br1.close();
+				    		br2.close();
+						/*if (seikai.equals(kekka)) {
+							System.out.println("正解だよ");
+						} else {
+							System.out.println("だめだよ");
 						}*/
-						br1.close();
-						br2.close();
-					} catch (FileNotFoundException e) {
-						System.out.println(e);
-					} catch (IOException e) {
-						System.out.println(e);
-					} catch (Exception e) {
-						System.out.println(e);
-					}
-					
-					return redirect(routes.Application.result());
+				    		StringTokenizer st1 = new StringTokenizer(teacher);
+				    		int index = 0;
+				    		while (st1.hasMoreTokens()) {
+				    			String token = st1.nextToken();
+				    			if (student.indexOf(token,index) != -1 && student.indexOf(token,index) >= index) {
+				    				index = student.indexOf(token) + 1;
+				    				if (!st1.hasMoreTokens()) {
+				    					System.out.println("正解です");
+				    					stringArray[i] = "正解です";
+				    					//データベース保存
+				    				}
+				    			} else {
+				    				System.out.println("不正解です");
+				    				//stringArray[i] = "不正解です";
+				    				BufferedReader feedbr = null;
+				    				try {
+				    					File feedfile = new File("feed" + num + "_" + (i + 1) +".txt");
+				    					feedbr = new BufferedReader(new FileReader(feedfile));
+				    					StringBuffer feedsb = new StringBuffer();
+							    		int feed;
+							    		while ((feed = feedbr.read()) != -1) {
+							    			feedsb.append((char) feed);
+							    		}
+							    		String feedback = feedsb.toString();				    		
+							    		feedbr.close();
+							    		System.out.println(feedback);
+							    		String crlf = System.getProperty("line.separator");
+							    		stringArray[i] = "不正解です" +"\r\n" + feedback;
+							    		System.out.println(stringArray[i]);
+				    					/*byte[] feedfilesBytes = Files.readAllBytes(Paths.get("feed" + num + "_" + (i + 1) +".txt"));
+				    					String feedfile = new String(feedfilesBytes, StandardCharsets.UTF_8);
+				    					System.out.println(feedfile);*/
+				    				} catch (FileNotFoundException e) {
+				    					System.out.println(e);
+				    				} catch (IOException e) {
+				    					System.out.println(e);
+				    				}
+				    				//データベース保存
+				    			}
+				    		}
+				    	} catch (FileNotFoundException e) {
+				    		System.out.println(e);
+				    	} catch (IOException e) {
+				    		System.out.println(e);
+				    	} catch (Exception e) {
+				    		System.out.println(e);
+				    	}
+				    }
+				    for (int n = 0; n < stringArray.length; n++) {   
+				    	System.out.println(stringArray[n]);
+				    }
+				    
+					//return redirect(routes.Application.result());
+					return ok(result.render(user,stringArray,feedbacks));
 				}
 			}
 		}
@@ -282,7 +321,11 @@ public class Application extends Controller {
 		//String title = "Kamiya System";
 		//session("id","kamiya");
 		String user = session("id");
-        return ok(result.render(user));
+		String[] stringArray;
+		String[] feedbacks;
+		stringArray = new String[5];
+		feedbacks = new String[5];
+        return ok(result.render(user,stringArray,feedbacks));
     }
 	
 	public static Result record() {
