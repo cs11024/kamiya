@@ -34,6 +34,7 @@ public class Application extends Controller {
     
     public static class Login {
     	/*ログインフォーム*/
+    	/*ログインフォーム*/
     	public String id;
     	public String password;
     	
