@@ -1,5 +1,5 @@
 @* result Template File *@
-@(user: String, kekka:Array[String], feed:Array[String])
+@(user: String, kaisu: Integer, kekka:Array[String], feed:Array[String])
 
 <html>
     <head>
@@ -14,7 +14,7 @@
         </header>
         
         <h1>Kamiya System</h1>
-    	<p>@user さんフィードバックページ</p>
+    	<p>@user さん @kaisu 回目フィードバックページ</p>
 		<!-- <script type = "text/javascript">
     		document.write("aaaaaaaaaaaaa<br>");
     		for (var i = 0; i < @kekka.length; i++){
@@ -23,7 +23,7 @@
     	</script> -->
 
     	@for((x, i) <- kekka.zipWithIndex){
-    		<p>テストケース@(i+1)</p>
+    		<p>＜テストケース@(i+1)＞</p>
     		@x
     	}
     	<!-- <p>@kekka(0)</p>

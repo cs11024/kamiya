@@ -4,6 +4,7 @@ import java.util.*;
 
 import play.db.ebean.Model.Finder;
 import models.User;
+import models.Data;
 import play.*;
 import play.mvc.*;
 //import play.api.mvc.MultipartFormData;
@@ -18,6 +19,16 @@ import play.data.validation.Constraints.*;
 import java.io.*;
 
 import play.api.*;
+
+/*import org.jfree.chart.JFreeChart;
+import org.jfree.chart.ChartFactory;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.ChartUtilities;
+import javax.swing.JFrame;
+import java.awt.BorderLayout;
+import org.jfree.chart.ChartPanel;*/
 
 public class Application extends Controller {
     
@@ -129,6 +140,8 @@ public class Application extends Controller {
 		int num = Integer.parseInt(kadai.substring(5));
 		System.out.println(num);
 		System.out.println(kadai);
+		int rightnum = 0;
+		int kaisu = 1;
 		/*try {
 			System.out.println(Runtime.getRuntime().exec("dir").getOutputStream().toString());
 		} catch (Exception e) {
@@ -256,7 +269,7 @@ public class Application extends Controller {
 							System.out.println("だめだよ");
 						}*/
 				    		StringTokenizer st1 = new StringTokenizer(teacher);
-				    		int index = 0;
+				    		int index = 0;	
 				    		while (st1.hasMoreTokens()) {
 				    			String token = st1.nextToken();
 				    			if (student.indexOf(token,index) != -1 && student.indexOf(token,index) >= index) {
@@ -264,6 +277,7 @@ public class Application extends Controller {
 				    				if (!st1.hasMoreTokens()) {
 				    					System.out.println("正解です");
 				    					stringArray[i] = "正解です";
+				    					rightnum++;
 				    					//データベース保存
 				    				}
 				    			} else {
@@ -282,7 +296,7 @@ public class Application extends Controller {
 							    		feedbr.close();
 							    		System.out.println(feedback);
 							    		String crlf = System.getProperty("line.separator");
-							    		stringArray[i] = "不正解です" +"\r\n" + feedback;
+							    		stringArray[i] = "不正解です：" +"\r\n" + feedback;
 							    		System.out.println(stringArray[i]);
 				    					/*byte[] feedfilesBytes = Files.readAllBytes(Paths.get("feed" + num + "_" + (i + 1) +".txt"));
 				    					String feedfile = new String(feedfilesBytes, StandardCharsets.UTF_8);
@@ -307,8 +321,29 @@ public class Application extends Controller {
 				    	System.out.println(stringArray[n]);
 				    }
 				    
+				    /*Finder<String, Data> finder = new Finder<String, Data>(String.class,
+			                Data.class);
+			        List<Data> datas = finder.all();*/
+				    
+				    /*データベース登録*/
+				    kaisu = Data.kaisuu(user+"_"+num+"_") + 1;
+				    Data.register(user+"_"+num+"_"+kaisu, rightnum);
+				    
+				    
+				    /*DefaultCategoryDataset data = new DefaultCategoryDataset();
+				    data.setValue(3, "神谷", "1回目");
+				    data.setValue(2, "神谷", "2回目");
+				    data.setValue(6, "神谷", "3回目");
+				    JFreeChart chart = ChartFactory.createLineChart("課題1", "回数", "正解数", data, PlotOrientation.VERTICAL, true, false, false);
+				    File rireki = new File("./test1_1.jpeg");
+				    try {
+				    	ChartUtilities.saveChartAsJPEG(rireki, chart, 400, 300);
+				    } catch (IOException e) {
+				    	e.printStackTrace();
+				    }*/
+				    
 					//return redirect(routes.Application.result());
-					return ok(result.render(user,stringArray,feedbacks));
+					return ok(result.render(user,kaisu,stringArray,feedbacks));
 				}
 			}
 		}
@@ -321,11 +356,12 @@ public class Application extends Controller {
 		//String title = "Kamiya System";
 		//session("id","kamiya");
 		String user = session("id");
+		int kaisu = 0;
 		String[] stringArray;
 		String[] feedbacks;
 		stringArray = new String[5];
 		feedbacks = new String[5];
-        return ok(result.render(user,stringArray,feedbacks));
+        return ok(result.render(user,kaisu,stringArray,feedbacks));
     }
 	
 	public static Result record() {
