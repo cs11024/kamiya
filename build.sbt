@@ -6,8 +6,8 @@ libraryDependencies ++= Seq(
   javaJdbc,
   javaEbean,
   cache,
-  "jfree" % "jfreechart" % "1.0.9",
-  "jfree" % "jcommon" % "1.0.19"
+  "jfree" % "jfreechart" % "1.0.13",
+  "jfree" % "jcommon" % "1.0.16"
 )
 
 play.Project.playJavaSettings

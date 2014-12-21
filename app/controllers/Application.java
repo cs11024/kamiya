@@ -20,15 +20,16 @@ import java.io.*;
 
 import play.api.*;
 
-/*import org.jfree.chart.JFreeChart;
+import org.jfree.chart.JFreeChart;
 import org.jfree.chart.ChartFactory;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.StandardChartTheme;
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
-import org.jfree.chart.ChartPanel;*/
+import org.jfree.chart.ChartPanel;
 
 public class Application extends Controller {
     
@@ -330,19 +331,25 @@ public class Application extends Controller {
 				    /*データベース登録*/
 				    kaisu = Data.kaisuu(user+"_"+num+"_") + 1;
 				    Data.register(user+"_"+num+"_"+kaisu, rightnum);
-				    
-				    
-				    /*DefaultCategoryDataset data = new DefaultCategoryDataset();
-				    data.setValue(3, "神谷", "1回目");
+
+				    int seikaisu = 0;
+				    ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
+				    DefaultCategoryDataset data = new DefaultCategoryDataset();
+				    for (int i = 1; i <= kaisu; i++) {
+				    	seikaisu = Data.rireki(user+"_"+num+"_"+i);
+				    	//data.setValue(seikaisu, user, kaisu+"回目");
+				    	data.addValue(seikaisu, user, i+"");
+				    }
+				    /*data.setValue(3, "神谷", "1回目");
 				    data.setValue(2, "神谷", "2回目");
-				    data.setValue(6, "神谷", "3回目");
+				    data.setValue(6, "神谷", "3回目");*/
 				    JFreeChart chart = ChartFactory.createLineChart("課題1", "回数", "正解数", data, PlotOrientation.VERTICAL, true, false, false);
-				    File rireki = new File("./test1_1.jpeg");
+				    File rireki = new File(user+"_"+num+".png");
 				    try {
-				    	ChartUtilities.saveChartAsJPEG(rireki, chart, 400, 300);
+				    	ChartUtilities.saveChartAsPNG(rireki, chart, 400, 300);
 				    } catch (IOException e) {
 				    	e.printStackTrace();
-				    }*/
+				    }
 				    
 					//return redirect(routes.Application.result());
 					return ok(result.render(user,kaisu,stringArray,feedbacks));
@@ -371,6 +378,14 @@ public class Application extends Controller {
 		String title = "Kamiya System";
 		//session("id","kamiya");
 		String user = session("id");
-        return ok(record.render(title, user));
+		File recordfile = new File(".");  
+		File[] recordFiles = recordfile.listFiles(getFileRegexFilter(user+"_", ".png"));
+		int size = recordFiles.length;
+		String[] filesName;
+		filesName = new String[recordFiles.length];
+		for (int i = 0; i < recordFiles.length; i++) {
+			filesName[i] = recordFiles[i].getName();
+		}
+        return ok(record.render(title, user, size, filesName));
     }
 }

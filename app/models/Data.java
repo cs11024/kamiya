@@ -28,4 +28,15 @@ public class Data extends Model {
 		//return find.where().eq("id", id).eq("password", password).findUnique();
 		return find.where().like("id", id+"%").findRowCount();
 	}
+	
+	public static int rireki(String id) {
+		//return find.where().eq("id", id).eq("password", password).findUnique();
+		return find.where().eq("id", id).findUnique().rightnum;
+		//return find.where().like("id", id+"%").findRowCount();
+	}
+	
+	/*public static int kadainumber(String id) {
+		//return find.where().eq("id", id).eq("password", password).findUnique();
+		return find.where().like("id", id+"%").findUnique();
+	}*/
 }

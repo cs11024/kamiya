@@ -1,5 +1,5 @@
 @* record Template File *@
-@(title: String, user: String)
+@(title: String, user: String, size: Integer, filesname: Array[String])
 
 <html>
     <head>
@@ -14,5 +14,12 @@
         
         <h1>Kamiya System</h1>
     	<p>@user さん履歴ページ</p>
+    	@for((x, i) <- filesname.zipWithIndex){
+    		<p>＜課題@(i+1)＞</p>
+    		<p><img src="@x" alt="Sample"></p>
+    		<img src="../../70110024_1.png">
+    		@x
+    	}
+    	<img src="kamiya.png" alt="sample">
     </body>
 </html>
