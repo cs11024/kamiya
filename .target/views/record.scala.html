@@ -16,10 +16,43 @@
     	<p>@user さん履歴ページ</p>
     	@for((x, i) <- filesname.zipWithIndex){
     		<p>＜課題@(i+1)＞</p>
-    		<p><img src="@x" alt="Sample"></p>
-    		<img src="../../70110024_1.png">
-    		@x
+    		<!--<img src="@routes.Assets.at("images/70110024_1.png")" alt="sample"> -->
+    		<table>
+    			<tr>
+    				<td>
+    					<img src="@routes.Assets.at("images/"+x)" alt="sample">
+    				</td>
+    				<td><table border=1>
+						<tr>
+							<td>回数・テストケース</td>
+							@for((x, i) <- filesname.zipWithIndex){
+								<td>テストケース@(i+1)</td>
+							}
+						</tr>
+						<tr>
+							<td>1回目</td>
+							<td>○</td>
+							<td>○</td>
+							<td>×</td>
+						</tr>
+					</table></td>
+    			</tr>
+    		</table>
+    		<!-- <script type="text/javascript">
+    			document.write("<h1>九九の表</h1>");
+    			document.write("<table border>");
+
+    			for (var i = 1; i < 10; i++) {
+    				document.write("<tr>");
+    				for (var j = 1; j < 10; j++) {
+        				document.write("<td>", i*j, "</td>");
+        			}
+    				document.write("</tr>");
+    			}
+    			document.write("</table>");
+    		</script> -->
     	}
-    	<img src="kamiya.png" alt="sample">
+    	
+    	
     </body>
 </html>

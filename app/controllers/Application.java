@@ -35,8 +35,6 @@ public class Application extends Controller {
     
     public static class Login {
     	/*ログインフォーム*/
-    	/*ログインフォーム*/
-    	/*ログインフォーム*/
     	public String id;
     	public String password;
     	
@@ -58,11 +56,6 @@ public class Application extends Controller {
     		return "ID:" + id + ", Number:" + number + ", FileName:" + filename;
     	}
     }
-    
-    /*public static class Check {
-    	//チェックフォーム
-    	public File checkfile;
-    }*/
     
     public static Result index() {
 		/*インデックスページ表示する*/
@@ -123,17 +116,6 @@ public class Application extends Controller {
 			}  
 		};  
 	}
-	
-	/*public static Result checker() {
-		String user = session("id");
-		Form<Check> checkform = form(Check.class).bindFromRequest();
-		System.out.println(checkform);
-		if (checkform.hasErrors()) {
-			return ok(result.render(user));
-		} else {
-			return redirect(routes.Application.result());
-		}
-	}*/
 	
 	public static Result checker() {
 		String user = session("id");
@@ -239,13 +221,16 @@ public class Application extends Controller {
 					/*正解結果と学習者プログラムを比較*/
 				    String[] stringArray;
 				    String[] feedbacks;
+				    String[] testcase;
+				    String uooooooo = null;
 				    File teachfile = new File(".");  
 				    File[] teachFiles = teachfile.listFiles(getFileRegexFilter("teach" + num + "_", ".txt"));
 				    File stufile = new File(".");  
 				    File[] stuFiles = stufile.listFiles(getFileRegexFilter("stu" + num + "_", ".txt"));
 				    stringArray = new String[teachFiles.length];
 				    feedbacks = new String[teachFiles.length];
-				    for (int i = 0; i < teachFiles.length; i++) {   
+				    testcase = new String[testFiles.length];
+				    for (int i = 0; i < teachFiles.length; i++) {
 				    	BufferedReader br1 = null;
 				    	BufferedReader br2 = null;
 				    	System.out.println("ファイル" + (i+1) + "→" + teachFiles[i]);
@@ -280,11 +265,15 @@ public class Application extends Controller {
 				    				if (!st1.hasMoreTokens()) {
 				    					System.out.println("正解です");
 				    					stringArray[i] = "正解です";
+				    					testcase[i] = "○";
+				    					uooooooo = uooooooo+"○";
 				    					rightnum++;
 				    					//データベース保存
 				    				}
 				    			} else {
 				    				System.out.println("不正解です");
+				    				testcase[i] = "×";
+				    				uooooooo = uooooooo+"×";
 				    				//stringArray[i] = "不正解です";
 				    				BufferedReader feedbr = null;
 				    				try {
@@ -322,15 +311,10 @@ public class Application extends Controller {
 				    }
 				    for (int n = 0; n < stringArray.length; n++) {   
 				    	System.out.println(stringArray[n]);
-				    }
-				    
-				    /*Finder<String, Data> finder = new Finder<String, Data>(String.class,
-			                Data.class);
-			        List<Data> datas = finder.all();*/
-				    
+				    }				    
 				    /*データベース登録*/
 				    kaisu = Data.kaisuu(user+"_"+num+"_") + 1;
-				    Data.register(user+"_"+num+"_"+kaisu, rightnum);
+				    Data.register(user+"_"+num+"_"+kaisu, rightnum, Arrays.toString(testcase));
 
 				    int seikaisu = 0;
 				    ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
@@ -344,13 +328,12 @@ public class Application extends Controller {
 				    data.setValue(2, "神谷", "2回目");
 				    data.setValue(6, "神谷", "3回目");*/
 				    JFreeChart chart = ChartFactory.createLineChart("課題1", "回数", "正解数", data, PlotOrientation.VERTICAL, true, false, false);
-				    File rireki = new File(user+"_"+num+".png");
+				    File rireki = new File("./public/images/"+user+"_"+num+".png");
 				    try {
 				    	ChartUtilities.saveChartAsPNG(rireki, chart, 400, 300);
 				    } catch (IOException e) {
 				    	e.printStackTrace();
 				    }
-				    
 					//return redirect(routes.Application.result());
 					return ok(result.render(user,kaisu,stringArray,feedbacks));
 				}
@@ -386,6 +369,13 @@ public class Application extends Controller {
 		for (int i = 0; i < recordFiles.length; i++) {
 			filesName[i] = recordFiles[i].getName();
 		}
+		/*char[] testcase;
+		testcase = new char[50];
+		testcase = Data.kekka(user+"_");*/
+		List<Data> uo = new ArrayList<Data>();
+		uo = Data.kekka(user+"_1_");
+		System.out.println(Data.kekka(user+"_1_"));
+		System.out.println(uo.get(0).testcase);
         return ok(record.render(title, user, size, filesName));
     }
 }

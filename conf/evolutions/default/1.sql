@@ -6,6 +6,7 @@
 create table data (
   id                        varchar(255) not null,
   rightnum                  integer,
+  testcase                  varchar(255),
   constraint pk_data primary key (id))
 ;
 
