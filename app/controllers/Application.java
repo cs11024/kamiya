@@ -27,8 +27,11 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.StandardChartTheme;
+
 import javax.swing.JFrame;
+
 import java.awt.BorderLayout;
+
 import org.jfree.chart.ChartPanel;
 
 public class Application extends Controller {
@@ -222,7 +225,7 @@ public class Application extends Controller {
 				    String[] stringArray;
 				    String[] feedbacks;
 				    String[] testcase;
-				    String uooooooo = null;
+				    StringBuilder results = new StringBuilder();
 				    File teachfile = new File(".");  
 				    File[] teachFiles = teachfile.listFiles(getFileRegexFilter("teach" + num + "_", ".txt"));
 				    File stufile = new File(".");  
@@ -266,14 +269,14 @@ public class Application extends Controller {
 				    					System.out.println("正解です");
 				    					stringArray[i] = "正解です";
 				    					testcase[i] = "○";
-				    					uooooooo = uooooooo+"○";
+				    					results.append("○");
 				    					rightnum++;
 				    					//データベース保存
 				    				}
 				    			} else {
 				    				System.out.println("不正解です");
 				    				testcase[i] = "×";
-				    				uooooooo = uooooooo+"×";
+				    				results.append("×");
 				    				//stringArray[i] = "不正解です";
 				    				BufferedReader feedbr = null;
 				    				try {
@@ -314,7 +317,8 @@ public class Application extends Controller {
 				    }				    
 				    /*データベース登録*/
 				    kaisu = Data.kaisuu(user+"_"+num+"_") + 1;
-				    Data.register(user+"_"+num+"_"+kaisu, rightnum, Arrays.toString(testcase));
+				    String resultset = new String(results);
+				    Data.register(user+"_"+num+"_"+kaisu, rightnum, resultset);
 
 				    int seikaisu = 0;
 				    ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
@@ -372,10 +376,25 @@ public class Application extends Controller {
 		/*char[] testcase;
 		testcase = new char[50];
 		testcase = Data.kekka(user+"_");*/
-		List<Data> uo = new ArrayList<Data>();
-		uo = Data.kekka(user+"_1_");
-		System.out.println(Data.kekka(user+"_1_"));
-		System.out.println(uo.get(0).testcase);
-        return ok(record.render(title, user, size, filesName));
+		List<Data> results = new ArrayList<Data>();
+		results = Data.kekka(user+"_");
+		System.out.println(results.get(0).testcase);
+		String testcase[][];
+		testcase = new String[results.size()][results.size()];
+		int num = 1;
+		for (int i = 0; i < results.size(); i++) {
+			if (results.get(i).id.startsWith(user+"_"+num)) {
+				testcase[num-1][i] = results.get(i).testcase;
+			} else {
+				num++;
+			}
+		}
+		for (int i = 0; i< results.size(); i++) {
+			System.out.println("配列"+i);
+			for (int j = 0; j < results.size(); j++) {
+				System.out.println(testcase[i][j]);
+			}
+		}
+        return ok(record.render(title, user, size, filesName, testcase));
     }
 }

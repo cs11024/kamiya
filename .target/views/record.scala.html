@@ -1,5 +1,5 @@
 @* record Template File *@
-@(title: String, user: String, size: Integer, filesname: Array[String])
+@(title: String, user: String, size: Integer, filesname: Array[String], testcase: Array[Array[String]])
 
 <html>
     <head>
@@ -25,16 +25,21 @@
     				<td><table border=1>
 						<tr>
 							<td>回数・テストケース</td>
-							@for((x, i) <- filesname.zipWithIndex){
-								<td>テストケース@(i+1)</td>
+							@*for((y, j) <- testcase(i).zipWithIndex){
+								<td>テスト@(j+1)</td>
+							}*@
+							@for(j <- 0 until testcase(i)(0).length){
+								<td>テスト@(j+1)</td>
 							}
 						</tr>
-						<tr>
-							<td>1回目</td>
-							<td>○</td>
-							<td>○</td>
-							<td>×</td>
-						</tr>
+						@for(j <- 0 until testcase(0).length){
+							<tr>
+								<td>@(j+1)回目</td>
+								@for(n <- 0 until testcase(i)(0).length){
+									<td>@testcase(i)(j).charAt(n)</td>
+								}	
+							</tr>
+						}
 					</table></td>
     			</tr>
     		</table>
