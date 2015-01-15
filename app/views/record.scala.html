@@ -20,7 +20,7 @@
     		<table>
     			<tr>
     				<td>
-    					<img src="@routes.Assets.at("images/"+x)" alt="sample">
+    					<img src="@routes.Assets.at("images/"+x)" alt="image">
     				</td>
     				<td><table border=1>
 						<tr>
@@ -32,7 +32,7 @@
 								<td>テスト@(j+1)</td>
 							}
 						</tr>
-						@for(j <- 0 until testcase(0).length){
+						@for(j <- 0 until testcase(i).length){
 							<tr>
 								<td>@(j+1)回目</td>
 								@for(n <- 0 until testcase(i)(0).length){

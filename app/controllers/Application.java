@@ -27,6 +27,10 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.StandardChartTheme;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+
 
 import javax.swing.JFrame;
 
@@ -130,6 +134,7 @@ public class Application extends Controller {
 		System.out.println(kadai);
 		int rightnum = 0;
 		int kaisu = 1;
+		kaisu = Data.kaisuu(user+"_"+num+"_") + 1;
 		/*try {
 			System.out.println(Runtime.getRuntime().exec("dir").getOutputStream().toString());
 		} catch (Exception e) {
@@ -146,17 +151,22 @@ public class Application extends Controller {
 					/*学習者プログラムをローカルに保存*/
 					File getfile = checkf.getFile();
 					File writefile = new File(fileName);
+					File savefile = new File(user+"_"+num+"_"+kaisu+".txt");
+					//File writefile = new File(user+"_"+num+"_"+kaisu+".java");
 					try {
 						FileReader filereader = new FileReader(getfile);
 						FileWriter filewriter = new FileWriter(writefile);
+						FileWriter savefilewriter = new FileWriter(savefile);
 						int ch = filereader.read();
 						while (ch != -1) {
 							System.out.print((char)ch);
 							filewriter.write((char)ch);
+							savefilewriter.write((char)ch);
 							ch = filereader.read();
 						}
 						filereader.close();
 						filewriter.close();
+						savefilewriter.close();
 					} catch (FileNotFoundException e) {
 						System.out.println(e);
 					} catch (IOException e) {
@@ -316,7 +326,7 @@ public class Application extends Controller {
 				    	System.out.println(stringArray[n]);
 				    }				    
 				    /*データベース登録*/
-				    kaisu = Data.kaisuu(user+"_"+num+"_") + 1;
+				    //kaisu = Data.kaisuu(user+"_"+num+"_") + 1;
 				    String resultset = new String(results);
 				    Data.register(user+"_"+num+"_"+kaisu, rightnum, resultset);
 
@@ -332,6 +342,11 @@ public class Application extends Controller {
 				    data.setValue(2, "神谷", "2回目");
 				    data.setValue(6, "神谷", "3回目");*/
 				    JFreeChart chart = ChartFactory.createLineChart("課題1", "回数", "正解数", data, PlotOrientation.VERTICAL, true, false, false);
+				    
+				    CategoryPlot plot = chart.getCategoryPlot();
+				    NumberAxis numberAxis = (NumberAxis)plot.getRangeAxis();
+				    numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+
 				    File rireki = new File("./public/images/"+user+"_"+num+".png");
 				    try {
 				    	ChartUtilities.saveChartAsPNG(rireki, chart, 400, 300);
@@ -365,19 +380,29 @@ public class Application extends Controller {
 		String title = "Kamiya System";
 		//session("id","kamiya");
 		String user = session("id");
-		File recordfile = new File(".");  
+		//File recordfile = new File(".");
+		//File recordfile = new File("C:\\Users\\cs11024\\Documents\\checker\\play-2.2.4\\kamiya\\public\\images");
+		File recordfile = new File("./public/images");
 		File[] recordFiles = recordfile.listFiles(getFileRegexFilter(user+"_", ".png"));
 		int size = recordFiles.length;
 		String[] filesName;
-		filesName = new String[recordFiles.length];
-		for (int i = 0; i < recordFiles.length; i++) {
+		filesName = new String[size];
+		for (int i = 0; i < size; i++) {
 			filesName[i] = recordFiles[i].getName();
 		}
-		/*char[] testcase;
-		testcase = new char[50];
-		testcase = Data.kekka(user+"_");*/
+		
 		List<Data> results = new ArrayList<Data>();
-		results = Data.kekka(user+"_");
+		String testcase2[][];
+		testcase2 = new String[size][];
+		for (int i = 0; i < size; i++) {
+			results = Data.kekka(user+"_"+(i+1));
+			testcase2[i] = new String[results.size()];
+			for (int j = 0; j < results.size(); j++) {
+				testcase2[i][j] = results.get(j).testcase;
+			}
+		}
+		
+		/*results = Data.kekka(user+"_");
 		System.out.println(results.get(0).testcase);
 		String testcase[][];
 		testcase = new String[results.size()][results.size()];
@@ -388,13 +413,14 @@ public class Application extends Controller {
 			} else {
 				num++;
 			}
-		}
-		for (int i = 0; i< results.size(); i++) {
+		}*/
+		
+		for (int i = 0; i < size; i++) {
 			System.out.println("配列"+i);
-			for (int j = 0; j < results.size(); j++) {
-				System.out.println(testcase[i][j]);
+			for (int j = 0; j < testcase2[i].length; j++) {
+				System.out.println(testcase2[i][j]);
 			}
 		}
-        return ok(record.render(title, user, size, filesName, testcase));
+        return ok(record.render(title, user, size, filesName, testcase2));
     }
 }
