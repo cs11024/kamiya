@@ -29,6 +29,7 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.plot.PlotOrientation;
 
 
@@ -265,9 +266,9 @@ public class Application extends Controller {
 				    		br1.close();
 				    		br2.close();
 						/*if (seikai.equals(kekka)) {
-							System.out.println("正解だよ");
+							System.out.println("合格だよ");
 						} else {
-							System.out.println("だめだよ");
+							System.out.println("不合格だよ");
 						}*/
 				    		StringTokenizer st1 = new StringTokenizer(teacher);
 				    		int index = 0;	
@@ -276,18 +277,18 @@ public class Application extends Controller {
 				    			if (student.indexOf(token,index) != -1 && student.indexOf(token,index) >= index) {
 				    				index = student.indexOf(token) + 1;
 				    				if (!st1.hasMoreTokens()) {
-				    					System.out.println("正解です");
-				    					stringArray[i] = "正解です";
+				    					System.out.println("合格です");
+				    					stringArray[i] = "合格です";
 				    					testcase[i] = "○";
 				    					results.append("○");
 				    					rightnum++;
 				    					//データベース保存
 				    				}
 				    			} else {
-				    				System.out.println("不正解です");
+				    				System.out.println("不合格です");
 				    				testcase[i] = "×";
 				    				results.append("×");
-				    				//stringArray[i] = "不正解です";
+				    				//stringArray[i] = "不合格です";
 				    				BufferedReader feedbr = null;
 				    				try {
 				    					File feedfile = new File("feed" + num + "_" + (i + 1) +".txt");
@@ -301,7 +302,7 @@ public class Application extends Controller {
 							    		feedbr.close();
 							    		System.out.println(feedback);
 							    		String crlf = System.getProperty("line.separator");
-							    		stringArray[i] = "不正解です：" +"\r\n" + feedback;
+							    		stringArray[i] = "不合格です：" +"\r\n" + feedback;
 							    		System.out.println(stringArray[i]);
 				    					/*byte[] feedfilesBytes = Files.readAllBytes(Paths.get("feed" + num + "_" + (i + 1) +".txt"));
 				    					String feedfile = new String(feedfilesBytes, StandardCharsets.UTF_8);
@@ -341,11 +342,14 @@ public class Application extends Controller {
 				    /*data.setValue(3, "神谷", "1回目");
 				    data.setValue(2, "神谷", "2回目");
 				    data.setValue(6, "神谷", "3回目");*/
-				    JFreeChart chart = ChartFactory.createLineChart("課題1", "回数", "正解数", data, PlotOrientation.VERTICAL, true, false, false);
+				    JFreeChart chart = ChartFactory.createLineChart("課題"+num, "回数", "合格数", data, PlotOrientation.VERTICAL, true, false, false);
 				    
 				    CategoryPlot plot = chart.getCategoryPlot();
 				    NumberAxis numberAxis = (NumberAxis)plot.getRangeAxis();
 				    numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+				    
+				    LineAndShapeRenderer renderer = (LineAndShapeRenderer)plot.getRenderer();
+				    renderer.setSeriesShapesVisible(0, true);
 
 				    File rireki = new File("./public/images/"+user+"_"+num+".png");
 				    try {
