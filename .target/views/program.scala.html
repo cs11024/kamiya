@@ -1,0 +1,28 @@
+@* program Template File *@
+@(user: String, num: Integer, kaisu: Integer, kekka:Array[String])
+
+<html>
+    <head>
+        <title>Kamiya System</title>
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/record.css")">
+    </head>
+
+    <body>
+        <header>
+            <a href="@routes.Application.index" id="logo">トップページへ戻る</a>
+        </header>
+        
+        <h1>Kamiya System</h1>
+    	<p>@user さん＜課題@num＞@kaisu 回目フィードバックページ</p>
+    	
+    	@for((x, i) <- kekka.zipWithIndex){
+    		<p>＜テストケース@(i+1)＞</p>
+    		@x
+    		@kekka(i)
+    	}
+    	
+    	<embed type="video/quicktime" src="70110024_1_1.txt">
+    </body>
+</html>
+

@@ -19,6 +19,8 @@ GET		/result						controllers.Application.result()
 
 GET		/record						controllers.Application.record()
 
+GET		/program					controllers.Application.program(num: Int,kaisu: Int)
+
 
 #POST	/result						controllers.Application.result()
 

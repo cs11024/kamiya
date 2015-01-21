@@ -335,7 +335,7 @@ public class Application extends Controller {
 				    ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
 				    DefaultCategoryDataset data = new DefaultCategoryDataset();
 				    for (int i = 1; i <= kaisu; i++) {
-				    	seikaisu = Data.rireki(user+"_"+num+"_"+i);
+				    	seikaisu = Data.rightn(user+"_"+num+"_"+i);
 				    	//data.setValue(seikaisu, user, kaisu+"回目");
 				    	data.addValue(seikaisu, user, i+"");
 				    }
@@ -367,7 +367,7 @@ public class Application extends Controller {
 	}
 	
 	public static Result result() {
-		/*インデックスページ表示する*/
+		/*フィードバックページ表示する*/
 		//String title = "Kamiya System";
 		//session("id","kamiya");
 		String user = session("id");
@@ -426,5 +426,47 @@ public class Application extends Controller {
 			}
 		}
         return ok(record.render(title, user, size, filesName, testcase2));
+    }
+	
+	public static Result program(int num, int kaisu) {
+		/*履歴から○回目のページ表示する*/
+		//String title = "Kamiya System";
+		//session("id","kamiya");
+		String user = session("id");
+		String rireki = Data.rireki(user+"_"+num+"_"+kaisu);
+		String[] stringArray;
+		stringArray = new String[rireki.length()];
+		for (int i = 0; i < rireki.length(); i++) {
+			char t = rireki.charAt(i);
+			if (String.valueOf(t) == "○") {
+				stringArray[i] = "合格です";
+			} else {
+				BufferedReader feedbr = null;
+				try {
+					File feedfile = new File("feed"+num+"_"+(i+1)+".txt");
+					feedbr = new BufferedReader(new FileReader(feedfile));
+					StringBuffer feedsb = new StringBuffer();
+		    		int feed;
+		    		while ((feed = feedbr.read()) != -1) {
+		    			feedsb.append((char) feed);
+		    		}
+		    		String feedback = feedsb.toString();				    		
+		    		feedbr.close();
+		    		String crlf = System.getProperty("line.separator");
+		    		//System.lineSeparator();
+		    		stringArray[i] = "不合格です：" +"\r\n" + feedback;
+		    		//System.out.println(stringArray[i]);
+					/*byte[] feedfilesBytes = Files.readAllBytes(Paths.get("feed" + num + "_" + (i + 1) +".txt"));
+					String feedfile = new String(feedfilesBytes, StandardCharsets.UTF_8);
+					System.out.println(feedfile);*/
+				} catch (FileNotFoundException e) {
+					System.out.println(e);
+				} catch (IOException e) {
+					System.out.println(e);
+				}
+			}
+		}
+		//int kaisuu = Integer.parseInt(kaisu);
+        return ok(program.render(user,num,kaisu,stringArray));
     }
 }

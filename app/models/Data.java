@@ -33,10 +33,14 @@ public class Data extends Model {
 		return find.where().like("id", id+"%").findRowCount();
 	}
 	
-	public static int rireki(String id) {
+	public static int rightn(String id) {
 		//return find.where().eq("id", id).eq("password", password).findUnique();
 		return find.where().eq("id", id).findUnique().rightnum;
 		//return find.where().like("id", id+"%").findRowCount();
+	}
+	
+	public static String rireki(String id) {
+		return find.where().eq("id", id).findUnique().testcase;
 	}
 	
 	public static List<Data> kekka(String id) {

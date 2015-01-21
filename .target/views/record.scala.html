@@ -34,7 +34,7 @@
 						</tr>
 						@for(j <- 0 until testcase(i).length){
 							<tr>
-								<td>@(j+1)回目</td>
+								<td><a href="@routes.Application.program(i+1,j+1)" id="@(j+1)">@(j+1)回目</a></td>
 								@for(n <- 0 until testcase(i)(0).length){
 									<td>@testcase(i)(j).charAt(n)</td>
 								}	
