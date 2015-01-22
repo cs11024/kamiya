@@ -152,7 +152,7 @@ public class Application extends Controller {
 					/*学習者プログラムをローカルに保存*/
 					File getfile = checkf.getFile();
 					File writefile = new File(fileName);
-					File savefile = new File(user+"_"+num+"_"+kaisu+".txt");
+					File savefile = new File("./public/text/"+user+"_"+num+"_"+kaisu+".txt");
 					//File writefile = new File(user+"_"+num+"_"+kaisu+".java");
 					try {
 						FileReader filereader = new FileReader(getfile);
@@ -436,6 +436,7 @@ public class Application extends Controller {
 		String rireki = Data.rireki(user+"_"+num+"_"+kaisu);
 		String[] stringArray;
 		stringArray = new String[rireki.length()];
+		String text = null;
 		for (int i = 0; i < rireki.length(); i++) {
 			char t = rireki.charAt(i);
 			if (String.valueOf(t) == "○") {
@@ -466,7 +467,8 @@ public class Application extends Controller {
 				}
 			}
 		}
+		text = user+"_"+num+"_"+kaisu+".txt";
 		//int kaisuu = Integer.parseInt(kaisu);
-        return ok(program.render(user,num,kaisu,stringArray));
+        return ok(program.render(user,num,kaisu,stringArray,text));
     }
 }
