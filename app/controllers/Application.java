@@ -5,6 +5,7 @@ import java.util.*;
 import play.db.ebean.Model.Finder;
 import models.User;
 import models.Data;
+import play.api.*;
 import play.*;
 import play.mvc.*;
 //import play.api.mvc.MultipartFormData;
@@ -17,8 +18,6 @@ import views.html.*;
 import play.data.validation.Constraints.*;
 
 import java.io.*;
-
-import play.api.*;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.ChartFactory;
@@ -70,12 +69,14 @@ public class Application extends Controller {
 		String title = "Kamiya System";
 		//session("id","kamiya");
 		String user = session("id");
+		play.Logger.debug("index: "+user);
         return ok(index.render(title, user, form(MyForm.class)));   
     }
     
     public static Result login() {
     	/*ログインページ表示する*/
-    	//User user1 = new User("70110024","kamiya","kamiya");    	
+    	//User user1 = new User("70110024","kamiya","kamiya");  
+    	//play.Logger.debug("hogehoge");
     	return ok(login.render(form(Login.class)));
     }
     
@@ -88,6 +89,7 @@ public class Application extends Controller {
         } else {
         	session().clear();
         	session("id", loginForm.get().id);
+        	play.Logger.debug("login: "+loginForm.get().id);
         	return redirect(routes.Application.index());
         }
     }
@@ -96,6 +98,7 @@ public class Application extends Controller {
 		/*前作ったフォームを送るやつ*/
 		String title = "Kamiya System Send Form";
 		String user = session("id");
+		play.Logger.debug("sendform: "+user);
 		Form<MyForm> form = form(MyForm.class).bindFromRequest();
 		if (form.hasErrors()) {
 			String msg = "入力に問題があります。";
@@ -110,6 +113,7 @@ public class Application extends Controller {
 	public static Result check() {
 		/*チェックページ表示する*/
 		String user = session("id");
+		play.Logger.debug("check: "+user);
         //return ok(check.render(form(Check.class), user));
         return ok(check.render(user));
     }
@@ -127,6 +131,7 @@ public class Application extends Controller {
 	
 	public static Result checker() {
 		String user = session("id");
+		play.Logger.debug("checker: "+user);
 		MultipartFormData body = request().body().asMultipartFormData();
 		FilePart checkf = body.getFile("checkf");
 		String kadai = body.asFormUrlEncoded().get("kadai")[0];
@@ -152,7 +157,7 @@ public class Application extends Controller {
 					/*学習者プログラムをローカルに保存*/
 					File getfile = checkf.getFile();
 					File writefile = new File(fileName);
-					File savefile = new File("./public/text/"+user+"_"+num+"_"+kaisu+".txt");
+					File savefile = new File("./public/program/"+user+"_"+num+"_"+kaisu+".txt");
 					//File writefile = new File(user+"_"+num+"_"+kaisu+".java");
 					try {
 						FileReader filereader = new FileReader(getfile);
@@ -176,10 +181,17 @@ public class Application extends Controller {
 					
 					/*学習者プログラムをコンパイル*/
 					ProcessBuilder compile = new ProcessBuilder("javac", fileName);
+					//compile.redirectErrorStream(true);
 					try {
 						Process processc = compile.start();
-						int ret = processc.waitFor();
-						System.out.println("compile exited with value: " + ret);
+						processc.waitFor();
+						/*int ret = processc.exitValue();
+						if (ret != 0) {
+							System.out.println("uoooooooooooo");
+							processc.destroy();
+							return redirect(routes.Application.index());
+						}*/
+						//System.out.println("compile exited with value: " + ret);
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (InterruptedException e) {
@@ -358,6 +370,7 @@ public class Application extends Controller {
 				    	e.printStackTrace();
 				    }
 					//return redirect(routes.Application.result());
+				    play.Logger.debug("result-"+num+"-"+kaisu+": "+user);
 					return ok(result.render(user,kaisu,stringArray,feedbacks));
 				}
 			}
@@ -371,6 +384,7 @@ public class Application extends Controller {
 		//String title = "Kamiya System";
 		//session("id","kamiya");
 		String user = session("id");
+		play.Logger.debug("result: "+user);
 		int kaisu = 0;
 		String[] stringArray;
 		String[] feedbacks;
@@ -384,6 +398,7 @@ public class Application extends Controller {
 		String title = "Kamiya System";
 		//session("id","kamiya");
 		String user = session("id");
+		play.Logger.debug("record: "+user);
 		//File recordfile = new File(".");
 		//File recordfile = new File("C:\\Users\\cs11024\\Documents\\checker\\play-2.2.4\\kamiya\\public\\images");
 		File recordfile = new File("./public/images");
@@ -439,8 +454,16 @@ public class Application extends Controller {
 		String text = null;
 		for (int i = 0; i < rireki.length(); i++) {
 			char t = rireki.charAt(i);
-			if (String.valueOf(t) == "○") {
+			System.out.println(t);
+			System.out.println((int)t);
+			if ((int)t == 9675) {
+				stringArray[i] = "feed"+num+"_"+(i+1)+".txt";
+			} else {
+				stringArray[i] = "feed"+num+"_"+(i+1)+"_f.txt";
+			}
+			/*if ((int)t == 9675) {
 				stringArray[i] = "合格です";
+				//System.out.println(t);
 			} else {
 				BufferedReader feedbr = null;
 				try {
@@ -456,19 +479,16 @@ public class Application extends Controller {
 		    		String crlf = System.getProperty("line.separator");
 		    		//System.lineSeparator();
 		    		stringArray[i] = "不合格です：" +"\r\n" + feedback;
-		    		//System.out.println(stringArray[i]);
-					/*byte[] feedfilesBytes = Files.readAllBytes(Paths.get("feed" + num + "_" + (i + 1) +".txt"));
-					String feedfile = new String(feedfilesBytes, StandardCharsets.UTF_8);
-					System.out.println(feedfile);*/
 				} catch (FileNotFoundException e) {
 					System.out.println(e);
 				} catch (IOException e) {
 					System.out.println(e);
 				}
-			}
+			}*/
 		}
 		text = user+"_"+num+"_"+kaisu+".txt";
 		//int kaisuu = Integer.parseInt(kaisu);
+		play.Logger.debug("program-"+num+"-"+kaisu+": "+user);
         return ok(program.render(user,num,kaisu,stringArray,text));
     }
 }
