@@ -18,8 +18,10 @@
     	
     	@for((x, i) <- kekka.zipWithIndex){
     		<p>＜テストケース@(i+1)＞</p>
-    		@x
-    		@kekka(i)
+    		@*x
+    		@kekka(i)*@
+    		<object data="@routes.Assets.at("text/"+x)" type="text/html" width="100%" height="50"></object>
+    		
     	}
     	<p>
     	<iframe src="@routes.Assets.at("program/"+text)" width="100%" height="500">
