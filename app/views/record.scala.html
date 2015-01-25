@@ -3,7 +3,7 @@
 
 <html>
     <head>
-        <title>Kamiya System</title>
+        <title>Check System</title>
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/record.css")">
     </head>
@@ -12,31 +12,31 @@
             <a href="@routes.Application.index" id="logo">トップページへ戻る</a>
         </header>
         
-        <h1>Kamiya System</h1>
-    	<p>@user さん履歴ページ</p>
+        <h1>Check System</h1>
+    	<p class="top">@user さん履歴ページ</p>
     	@for((x, i) <- filesname.zipWithIndex){
-    		<p>＜課題@(i+1)＞</p>
+    		<p class="kadai">＜課題@(i+1)＞</p>
     		<!--<img src="@routes.Assets.at("images/70110024_1.png")" alt="sample"> -->
-    		<table>
+    		<table class="all">
     			<tr>
     				<td>
     					<img src="@routes.Assets.at("images/"+x)" alt="image">
     				</td>
-    				<td><table border=1>
+    				<td><table class="kekka" border="1" cellspacing="0" cellpadding="5" bordercolor="#333333">
 						<tr>
-							<td>回数・テストケース</td>
+							<td align="center">回数・テスト</td>
 							@*for((y, j) <- testcase(i).zipWithIndex){
 								<td>テスト@(j+1)</td>
 							}*@
 							@for(j <- 0 until testcase(i)(0).length){
-								<td>テスト@(j+1)</td>
+								<td align="center">テスト@(j+1)</td>
 							}
 						</tr>
 						@for(j <- 0 until testcase(i).length){
 							<tr>
 								<td><a href="@routes.Application.program(i+1,j+1)" id="@(j+1)">@(j+1)回目</a></td>
 								@for(n <- 0 until testcase(i)(0).length){
-									<td>@testcase(i)(j).charAt(n)</td>
+									<td align="center">@testcase(i)(j).charAt(n)</td>
 								}	
 							</tr>
 						}

@@ -1,0 +1,13 @@
+h1 { margin-top:20px; }
+p { margin-left:20px;}
+p.top { margin-bottom:25px; font-size:1.1em; color:#696969; }
+a { margin-left:10px; }
+button {
+	width:230px;
+	height:50px;
+	font-size:1.4em;
+	font-weight:bold;
+	background-color:#248;
+	color:#fff;
+	border-style:none;
+}

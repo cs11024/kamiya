@@ -66,7 +66,7 @@ public class Application extends Controller {
     
     public static Result index() {
 		/*インデックスページ表示する*/
-		String title = "Kamiya System";
+		String title = "Check System";
 		//session("id","kamiya");
 		String user = session("id");
 		play.Logger.debug("index: "+user);
@@ -96,7 +96,7 @@ public class Application extends Controller {
 	
 	public static Result sendform() {
 		/*前作ったフォームを送るやつ*/
-		String title = "Kamiya System Send Form";
+		String title = "Check System Send Form";
 		String user = session("id");
 		play.Logger.debug("sendform: "+user);
 		Form<MyForm> form = form(MyForm.class).bindFromRequest();
@@ -373,7 +373,11 @@ public class Application extends Controller {
 				    play.Logger.debug("result-"+num+"-"+kaisu+": "+user);
 					return ok(result.render(user,kaisu,stringArray,feedbacks));
 				}
+				flash("error", "ファイルない");
+				return redirect(routes.Application.index());
 			}
+			flash("error", "ファイルない");
+			return redirect(routes.Application.index());
 		}
 		flash("error", "ファイルない");
 		return redirect(routes.Application.index());    
@@ -395,7 +399,7 @@ public class Application extends Controller {
 	
 	public static Result record() {
 		/*履歴ページ表示する*/
-		String title = "Kamiya System";
+		String title = "Check System";
 		//session("id","kamiya");
 		String user = session("id");
 		play.Logger.debug("record: "+user);

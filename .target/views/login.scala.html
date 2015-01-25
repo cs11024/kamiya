@@ -7,7 +7,7 @@
 }
 <html>
     <head>
-        <title>Kamiya System</title>
+        <title>Check System</title>
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/login.css")">
     </head>
@@ -15,22 +15,20 @@
         <header>
             <!-- <a href="@routes.Application.index" id="logo">トップページへ戻る</a> -->
         </header>
-    
+        
+        @helper.form(routes.Application.authenticate) {
+		<h1>Sign in</h1>
+		<!-- @helper.inputText(form("id")) -->
+ 		<!-- @helper.inputPassword(form("password")) -->
+		<p>
+			<input type="id" name="id" placeholder="Id" value="@form("id").value">
+		</p>
+		<p>
+			<input type="password" name="password" placeholder="Password">
+		</p>
+		<p>
+			<button type="submit">Login</button>
+		</p>
+		}
     </body>
 </html>
-@helper.form(routes.Application.authenticate) {
-   <h1>Sign in</h1>
-
- <!-- @helper.inputText(form("id")) -->
- <!-- @helper.inputPassword(form("password")) -->
-   <p>
-       <input type="id" name="id" placeholder="Id" value="@form("id").value">
-   </p>
-   <p>
-       <input type="password" name="password" placeholder="Password">
-   </p>
-
-   <p>
-       <button type="submit">Login</button>
-   </p>
-}

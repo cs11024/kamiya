@@ -4,30 +4,38 @@
 
 @main(title) {
 	
-	<h1>Kamiya System</h1>
-	<p>@user さんようこそ</p>
-	@form(action = routes.Application.sendform) {
+	<h1>Check System</h1>
+	<p class="top">@user さんトップページ</p>
+	
+	@*form(action = routes.Application.sendform) {
+		<a href="@routes.Application.check" id="logo">プログラムチェック</a><BR>
+		<a href="@routes.Application.record" id="logo">履歴</a><BR>*@
 		
 		@*inputText(
 			field = myform("id"),
 			args = '_label -> "ID"
 		)
-		
 		<FORM ACTION="test3.pl" METHOD="post" ENCTYPE="multipart/form-data">
  			<input type = "text" NAME="filename"><BR>
 			<input type = "file" NAME="upfile"><BR>
 			<input type = "submit">
 			<input type = "reset" VALUE="取消">
 		</FORM>*@
-		
 		@*<FORM ACTION="test3.pl" METHOD="post" ENCTYPE="multipart/form-data">
  			<input type = "text" NAME="filename"><BR>
 			<input type = "file" NAME="upfile"><BR>
 		</FORM>
 		<input type = "submit">*@
-		<a href="@routes.Application.check" id="logo">プログラムチェック</a><BR>
-		<a href="@routes.Application.record" id="logo">履歴</a><BR>
-
+	@*}*@
+	@form(action = routes.Application.check) {
+		<p class="botan">
+			<button type="submit">プログラムチェック</button>
+		</p>
+	}
+	@form(action = routes.Application.record) {
+		<p class="botan">
+			<button type="submit">履歴</button>
+		</p>
 	}
 	
     @*play20.welcome(message, style = "Java")*@
