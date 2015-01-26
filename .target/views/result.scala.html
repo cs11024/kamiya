@@ -1,11 +1,11 @@
 @* result Template File *@
-@(user: String, kaisu: Integer, kekka:Array[String], feed:Array[String])
+@(user: String, num: Integer, kaisu: Integer, kekka: Array[String], text: String)
 
 <html>
     <head>
         <title>Check System</title>
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/record.css")">
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/result.css")">
     </head>
 
     <body>
@@ -14,7 +14,7 @@
         </header>
         
         <h1>Check System</h1>
-    	<p>@user さん @kaisu 回目フィードバックページ</p>
+    	<p class="top">@user さん　（ 課題@num ）　@kaisu 回目フィードバックページ</p>
 		<!-- <script type = "text/javascript">
     		document.write("aaaaaaaaaaaaa<br>");
     		for (var i = 0; i < @kekka.length; i++){
@@ -24,14 +24,15 @@
 
     	@for((x, i) <- kekka.zipWithIndex){
     		<p>＜テストケース@(i+1)＞</p>
-    		@x
-    		@kekka(i)
+    		@*x
+    		@kekka(i)*@
+    		<object data="@routes.Assets.at("text/"+x)" type="text/html" width="100%" height="50"></object>
     	}
     	
-    	<iframe src="@routes.Assets.at("text/feed1_1.txt")" width="100%" height="500">
-    	<!-- <p>atto kekka(0)</p>
-    	<p>atto kekka(1)</p>
-    	<p>atto kekka(2)</p> -->
+    	<p>
+    	<iframe src="@routes.Assets.at("program/"+text)" width="100%" height="500">
+    	</iframe>
+		</p>
         
     </body>
 </html>

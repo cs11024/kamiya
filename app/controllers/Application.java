@@ -141,6 +141,7 @@ public class Application extends Controller {
 		int rightnum = 0;
 		int kaisu = 1;
 		kaisu = Data.kaisuu(user+"_"+num+"_") + 1;
+		String text ="";
 		/*try {
 			System.out.println(Runtime.getRuntime().exec("dir").getOutputStream().toString());
 		} catch (Exception e) {
@@ -290,7 +291,8 @@ public class Application extends Controller {
 				    				index = student.indexOf(token) + 1;
 				    				if (!st1.hasMoreTokens()) {
 				    					System.out.println("合格です");
-				    					stringArray[i] = "合格です";
+				    					//stringArray[i] = "合格です";
+				    					stringArray[i] = "feed"+num+"_"+(i+1)+".txt";
 				    					testcase[i] = "○";
 				    					results.append("○");
 				    					rightnum++;
@@ -298,11 +300,12 @@ public class Application extends Controller {
 				    				}
 				    			} else {
 				    				System.out.println("不合格です");
+				    				stringArray[i] = "feed"+num+"_"+(i+1)+"_f.txt";
 				    				testcase[i] = "×";
 				    				results.append("×");
 				    				//stringArray[i] = "不合格です";
 				    				BufferedReader feedbr = null;
-				    				try {
+				    				/*try {
 				    					File feedfile = new File("feed" + num + "_" + (i + 1) +".txt");
 				    					feedbr = new BufferedReader(new FileReader(feedfile));
 				    					StringBuffer feedsb = new StringBuffer();
@@ -316,14 +319,11 @@ public class Application extends Controller {
 							    		String crlf = System.getProperty("line.separator");
 							    		stringArray[i] = "不合格です：" +"\r\n" + feedback;
 							    		System.out.println(stringArray[i]);
-				    					/*byte[] feedfilesBytes = Files.readAllBytes(Paths.get("feed" + num + "_" + (i + 1) +".txt"));
-				    					String feedfile = new String(feedfilesBytes, StandardCharsets.UTF_8);
-				    					System.out.println(feedfile);*/
 				    				} catch (FileNotFoundException e) {
 				    					System.out.println(e);
 				    				} catch (IOException e) {
 				    					System.out.println(e);
-				    				}
+				    				}*/
 				    				//データベース保存
 				    			}
 				    		}
@@ -371,7 +371,8 @@ public class Application extends Controller {
 				    }
 					//return redirect(routes.Application.result());
 				    play.Logger.debug("result-"+num+"-"+kaisu+": "+user);
-					return ok(result.render(user,kaisu,stringArray,feedbacks));
+				    text = user+"_"+num+"_"+kaisu+".txt";
+					return ok(result.render(user,num,kaisu,stringArray,text));
 				}
 				flash("error", "ファイルない");
 				return redirect(routes.Application.index());
@@ -390,11 +391,13 @@ public class Application extends Controller {
 		String user = session("id");
 		play.Logger.debug("result: "+user);
 		int kaisu = 0;
+		int num = 0;
 		String[] stringArray;
-		String[] feedbacks;
+		//String[] feedbacks;
 		stringArray = new String[5];
-		feedbacks = new String[5];
-        return ok(result.render(user,kaisu,stringArray,feedbacks));
+		String text = "";
+		//feedbacks = new String[5];
+        return ok(result.render(user,num,kaisu,stringArray,text));
     }
 	
 	public static Result record() {

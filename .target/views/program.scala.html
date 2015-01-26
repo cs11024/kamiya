@@ -14,10 +14,10 @@
         </header>
         
         <h1>Check System</h1>
-    	<p class="top">@user さん　課題@num　　@kaisu 回目フィードバックページ</p>
+    	<p class="top">@user さん　（ 課題@num ）　@kaisu 回目フィードバックページ</p>
     	
     	@for((x, i) <- kekka.zipWithIndex){
-    		<p>＜テストケース@(i+1)＞</p>
+    		<p class="test">＜テストケース@(i+1)＞</p>
     		@*x
     		@kekka(i)*@
     		<object data="@routes.Assets.at("text/"+x)" type="text/html" width="100%" height="50"></object>
