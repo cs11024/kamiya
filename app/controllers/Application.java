@@ -69,7 +69,7 @@ public class Application extends Controller {
 		String title = "Check System";
 		//session("id","kamiya");
 		String user = session("id");
-		play.Logger.debug("index: "+user);
+		play.Logger.debug(user+": index");
         return ok(index.render(title, user, form(MyForm.class)));   
     }
     
@@ -83,13 +83,13 @@ public class Application extends Controller {
     public static Result authenticate() {
     	//System.out.println( form(Login.class));
     	Form<Login> loginForm = form(Login.class).bindFromRequest();
-    	System.out.println(loginForm);
+    	//System.out.println(loginForm);
         if (loginForm.hasErrors()) {
         	return badRequest(login.render(loginForm));
         } else {
         	session().clear();
         	session("id", loginForm.get().id);
-        	play.Logger.debug("login: "+loginForm.get().id);
+        	play.Logger.debug(loginForm.get().id+": login");
         	return redirect(routes.Application.index());
         }
     }
@@ -102,10 +102,12 @@ public class Application extends Controller {
 		Form<MyForm> form = form(MyForm.class).bindFromRequest();
 		if (form.hasErrors()) {
 			String msg = "入力に問題があります。";
+			play.Logger.debug(user+": index");
 			return badRequest(index.render(title, user, form));
 		} else {
 			MyForm data = form.get();
 			String msg = data.toString();
+			play.Logger.debug(user+": index");
 			return ok(index.render(title, user, form));
 		}
 	}
@@ -113,7 +115,7 @@ public class Application extends Controller {
 	public static Result check() {
 		/*チェックページ表示する*/
 		String user = session("id");
-		play.Logger.debug("check: "+user);
+		play.Logger.debug(user+": check");
         //return ok(check.render(form(Check.class), user));
         return ok(check.render(user));
     }
@@ -136,8 +138,8 @@ public class Application extends Controller {
 		FilePart checkf = body.getFile("checkf");
 		String kadai = body.asFormUrlEncoded().get("kadai")[0];
 		int num = Integer.parseInt(kadai.substring(5));
-		System.out.println(num);
-		System.out.println(kadai);
+		//System.out.println(num);
+		//System.out.println(kadai);
 		int rightnum = 0;
 		int kaisu = 1;
 		kaisu = Data.kaisuu(user+"_"+num+"_") + 1;
@@ -166,7 +168,7 @@ public class Application extends Controller {
 						FileWriter savefilewriter = new FileWriter(savefile);
 						int ch = filereader.read();
 						while (ch != -1) {
-							System.out.print((char)ch);
+							//System.out.print((char)ch);
 							filewriter.write((char)ch);
 							savefilewriter.write((char)ch);
 							ch = filereader.read();
@@ -217,18 +219,18 @@ public class Application extends Controller {
 				    		Process processe = exec.start();
 				    		InputStream stdIn = processe.getInputStream();
 				    		InputStream errIn = processe.getErrorStream();
-				    		int c;
+				    		/*int c;
 				    		while ((c = stdIn.read()) != -1) {
 				    			System.out.print((char)c);
-				    		}
+				    		}*/
 				    		stdIn.close();
-				    		while ((c = errIn.read()) != -1) {
+				    		/*while ((c = errIn.read()) != -1) {
 				    			System.out.print((char)c);
-				    		}
+				    		}*/
 				    		errIn.close();
-				    		System.out.println();
+				    		//System.out.println();
 				    		int ret = processe.waitFor();
-				    		System.out.println("execute exited with value: " + ret);
+				    		//System.out.println("execute exited with value: " + ret);
 			            /*InputStream stream = process.getErrorStream();
 			            while (true) {
 			                int c = stream.read();
@@ -260,8 +262,8 @@ public class Application extends Controller {
 				    for (int i = 0; i < teachFiles.length; i++) {
 				    	BufferedReader br1 = null;
 				    	BufferedReader br2 = null;
-				    	System.out.println("ファイル" + (i+1) + "→" + teachFiles[i]);
-				    	System.out.println("ファイル" + (i+1) + "→" + stuFiles[i]);
+				    	//System.out.println("ファイル" + (i+1) + "→" + teachFiles[i]);
+				    	//System.out.println("ファイル" + (i+1) + "→" + stuFiles[i]);
 				    	try {
 				    		br1 = new BufferedReader(new InputStreamReader(new FileInputStream(teachFiles[i].getName())));
 				    		br2 = new BufferedReader(new InputStreamReader(new FileInputStream(stuFiles[i].getName())));
@@ -290,7 +292,7 @@ public class Application extends Controller {
 				    			if (student.indexOf(token,index) != -1 && student.indexOf(token,index) >= index) {
 				    				index = student.indexOf(token) + 1;
 				    				if (!st1.hasMoreTokens()) {
-				    					System.out.println("合格です");
+				    					//System.out.println("合格です");
 				    					//stringArray[i] = "合格です";
 				    					stringArray[i] = "feed"+num+"_"+(i+1)+".txt";
 				    					testcase[i] = "○";
@@ -299,7 +301,7 @@ public class Application extends Controller {
 				    					//データベース保存
 				    				}
 				    			} else {
-				    				System.out.println("不合格です");
+				    				//System.out.println("不合格です");
 				    				stringArray[i] = "feed"+num+"_"+(i+1)+"_f.txt";
 				    				testcase[i] = "×";
 				    				results.append("×");
@@ -335,9 +337,9 @@ public class Application extends Controller {
 				    		System.out.println(e);
 				    	}
 				    }
-				    for (int n = 0; n < stringArray.length; n++) {   
+				    /*for (int n = 0; n < stringArray.length; n++) {   
 				    	System.out.println(stringArray[n]);
-				    }				    
+				    }*/				    
 				    /*データベース登録*/
 				    //kaisu = Data.kaisuu(user+"_"+num+"_") + 1;
 				    String resultset = new String(results);
@@ -370,17 +372,20 @@ public class Application extends Controller {
 				    	e.printStackTrace();
 				    }
 					//return redirect(routes.Application.result());
-				    play.Logger.debug("result-"+num+"-"+kaisu+": "+user);
 				    text = user+"_"+num+"_"+kaisu+".txt";
+				    play.Logger.debug(user+" :result-"+num+"-"+kaisu);
 					return ok(result.render(user,num,kaisu,stringArray,text));
 				}
 				flash("error", "ファイルない");
+				play.Logger.debug(user+" :index error ( "+num+" )");
 				return redirect(routes.Application.index());
 			}
 			flash("error", "ファイルない");
+			play.Logger.debug(user+" :index error ( "+num+" )");
 			return redirect(routes.Application.index());
 		}
 		flash("error", "ファイルない");
+		play.Logger.debug(user+" :index error ( "+num+" )");
 		return redirect(routes.Application.index());    
 	}
 	
@@ -389,7 +394,6 @@ public class Application extends Controller {
 		//String title = "Kamiya System";
 		//session("id","kamiya");
 		String user = session("id");
-		play.Logger.debug("result: "+user);
 		int kaisu = 0;
 		int num = 0;
 		String[] stringArray;
@@ -397,6 +401,7 @@ public class Application extends Controller {
 		stringArray = new String[5];
 		String text = "";
 		//feedbacks = new String[5];
+		play.Logger.debug(user+" :result");
         return ok(result.render(user,num,kaisu,stringArray,text));
     }
 	
@@ -405,7 +410,6 @@ public class Application extends Controller {
 		String title = "Check System";
 		//session("id","kamiya");
 		String user = session("id");
-		play.Logger.debug("record: "+user);
 		//File recordfile = new File(".");
 		//File recordfile = new File("C:\\Users\\cs11024\\Documents\\checker\\play-2.2.4\\kamiya\\public\\images");
 		File recordfile = new File("./public/images");
@@ -441,12 +445,13 @@ public class Application extends Controller {
 			}
 		}*/
 		
-		for (int i = 0; i < size; i++) {
+		/*for (int i = 0; i < size; i++) {
 			System.out.println("配列"+i);
 			for (int j = 0; j < testcase2[i].length; j++) {
 				System.out.println(testcase2[i][j]);
 			}
-		}
+		}*/
+		play.Logger.debug(user+" :record");
         return ok(record.render(title, user, size, filesName, testcase2));
     }
 	
@@ -461,8 +466,8 @@ public class Application extends Controller {
 		String text = null;
 		for (int i = 0; i < rireki.length(); i++) {
 			char t = rireki.charAt(i);
-			System.out.println(t);
-			System.out.println((int)t);
+			//System.out.println(t);
+			//System.out.println((int)t);
 			if ((int)t == 9675) {
 				stringArray[i] = "feed"+num+"_"+(i+1)+".txt";
 			} else {
@@ -495,7 +500,7 @@ public class Application extends Controller {
 		}
 		text = user+"_"+num+"_"+kaisu+".txt";
 		//int kaisuu = Integer.parseInt(kaisu);
-		play.Logger.debug("program-"+num+"-"+kaisu+": "+user);
+		play.Logger.debug(user+" :program-"+num+"-"+kaisu);
         return ok(program.render(user,num,kaisu,stringArray,text));
     }
 }
