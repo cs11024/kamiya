@@ -1,5 +1,5 @@
 @* result Template File *@
-@(user: String, num: Integer, kaisu: Integer, kekka: Array[String], text: String)
+@(user: String, num: Integer, kaisu: Integer, stringarray: Array[String], text: String, kekka: String, color: String)
 
 <html>
     <head>
@@ -14,18 +14,19 @@
         </header>
         
         <h1>Check System</h1>
-    	<p class="top">@user さん　（ 課題@num ）　@kaisu 回目フィードバックページ</p>
+    	<p class="top">@user さん　（ 課題@num ）　@kaisu 回目フィードバックページ<br>
+    	結果：　<font color="@color" size="5">@kekka</font></p>
 		<!-- <script type = "text/javascript">
     		document.write("aaaaaaaaaaaaa<br>");
-    		for (var i = 0; i < @kekka.length; i++){
+    		for (var i = 0; i < @stringarray.length; i++){
     			document.write("u<br>");	
     		}
     	</script> -->
 
-    	@for((x, i) <- kekka.zipWithIndex){
+    	@for((x, i) <- stringarray.zipWithIndex){
     		<p>＜テストケース@(i+1)＞</p>
     		@*x
-    		@kekka(i)*@
+    		@stringarray(i)*@
     		<object data="@routes.Assets.at("text/"+x)" type="text/plain" width="100%" height="50"></object>
     	}
     	

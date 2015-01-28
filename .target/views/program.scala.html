@@ -1,5 +1,5 @@
 @* program Template File *@
-@(user: String, num: Integer, kaisu: Integer, kekka:Array[String], tex: String)
+@(user: String, num: Integer, kaisu: Integer, stringarray:Array[String], tex: String, kekka: String, color: String)
 
 <html>
     <head>
@@ -14,15 +14,13 @@
         </header>
         
         <h1>Check System</h1>
-    	<p class="top">@user さん　（ 課題@num ）　@kaisu 回目フィードバックページ</p>
-    	
-    	@for((x, i) <- kekka.zipWithIndex){
+    	<p class="top">@user さん　（ 課題@num ）　@kaisu 回目フィードバックページ<br>
+    	結果：　<font color="@color" size="5">@kekka</font></p>
+    	@for((x, i) <- stringarray.zipWithIndex){
     		<p class="test">＜テストケース@(i+1)＞</p>
     		@*x
-    		@kekka(i)*@
-    		<div class="feed">
-    		<object data="@routes.Assets.at("text/"+x)" type="text/plain" width="100%" height="50"></object>
-    		</div>    		
+    		@stringarray(i)*@
+    		<object data="@routes.Assets.at("text/"+x)" type="text/plain" width="100%" height="50"></object>  		
     	}
     	<p>
     	<iframe src="@routes.Assets.at("program/"+tex)" width="100%" height="500">

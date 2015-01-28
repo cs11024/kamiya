@@ -1,7 +1,6 @@
 a { color:#696969; }
 h1 { margin-top:20px; }
 p { margin-left:20px; }
-p.top { margin-bottom:25px; font-size:1.1em; color:#696969; }
+p.top { margin-bottom:25px; font-size:1.2em; color:#696969; }
 object { margin-left:20px; font-size:large; }
-div.feed {font-size:2em; }
 iframe {border:2px solid #248;}

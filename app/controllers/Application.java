@@ -143,7 +143,9 @@ public class Application extends Controller {
 		int rightnum = 0;
 		int kaisu = 1;
 		kaisu = Data.kaisuu(user+"_"+num+"_") + 1;
-		String text ="";
+		String text = "";
+		String kekka = "";
+		String color = "";
 		/*try {
 			System.out.println(Runtime.getRuntime().exec("dir").getOutputStream().toString());
 		} catch (Exception e) {
@@ -163,19 +165,35 @@ public class Application extends Controller {
 					File savefile = new File("./public/program/"+user+"_"+num+"_"+kaisu+".txt");
 					//File writefile = new File(user+"_"+num+"_"+kaisu+".java");
 					try {
-						FileReader filereader = new FileReader(getfile);
+						FileInputStream fis = new FileInputStream(getfile);
+						InputStreamReader isr = new InputStreamReader(fis,"UTF-8");
+						BufferedReader programbr = new BufferedReader(isr);
+						FileOutputStream writefos = new FileOutputStream(writefile);
+						OutputStreamWriter writeosw = new OutputStreamWriter(writefos,"UTF-8");
+						PrintWriter writepw = new PrintWriter(writeosw);
+						FileOutputStream savefos = new FileOutputStream(savefile);
+						OutputStreamWriter saveosw = new OutputStreamWriter(savefos,"UTF-8");
+						PrintWriter savepw = new PrintWriter(saveosw);
+						String msg;
+						while ((msg = programbr.readLine()) != null) {
+							writepw.println(msg);
+							savepw.println(msg);
+						}
+						savepw.close();
+						writepw.close();
+						programbr.close();	
+						/*FileReader filereader = new FileReader(getfile);
 						FileWriter filewriter = new FileWriter(writefile);
 						FileWriter savefilewriter = new FileWriter(savefile);
 						int ch = filereader.read();
 						while (ch != -1) {
-							//System.out.print((char)ch);
 							filewriter.write((char)ch);
 							savefilewriter.write((char)ch);
 							ch = filereader.read();
 						}
 						filereader.close();
 						filewriter.close();
-						savefilewriter.close();
+						savefilewriter.close();*/
 					} catch (FileNotFoundException e) {
 						System.out.println(e);
 					} catch (IOException e) {
@@ -373,8 +391,16 @@ public class Application extends Controller {
 				    }
 					//return redirect(routes.Application.result());
 				    text = user+"_"+num+"_"+kaisu+".txt";
+				    if (rightnum == teachFiles.length) {
+				    	kekka = "合格";
+				    	color = "red";
+				    } else {
+				    	kekka = "不合格";
+				    	color = "blue";
+				    }
+				    
 				    play.Logger.debug(user+" :result-"+num+"-"+kaisu);
-					return ok(result.render(user,num,kaisu,stringArray,text));
+					return ok(result.render(user,num,kaisu,stringArray,text,kekka,color));
 				}
 				flash("error", "ファイルない");
 				play.Logger.debug(user+" :index error ( "+num+" )");
@@ -400,9 +426,11 @@ public class Application extends Controller {
 		//String[] feedbacks;
 		stringArray = new String[5];
 		String text = "";
+		String kekka = "";
+		String color = "";
 		//feedbacks = new String[5];
 		play.Logger.debug(user+" :result");
-        return ok(result.render(user,num,kaisu,stringArray,text));
+        return ok(result.render(user,num,kaisu,stringArray,text,kekka,color));
     }
 	
 	public static Result record() {
@@ -425,10 +453,12 @@ public class Application extends Controller {
 		String testcase2[][];
 		testcase2 = new String[size][];
 		for (int i = 0; i < size; i++) {
-			results = Data.kekka(user+"_"+(i+1));
+			results = Data.kekka(user+"_"+(i+1)+"_");
 			testcase2[i] = new String[results.size()];
 			for (int j = 0; j < results.size(); j++) {
-				testcase2[i][j] = results.get(j).testcase;
+				//testcase2[i][j] = results.get(j).testcase;
+				testcase2[i][j] = Data.rireki(user+"_"+(i+1)+"_"+(j+1));
+				System.out.println(testcase2[i][j]);
 			}
 		}
 		
@@ -464,12 +494,16 @@ public class Application extends Controller {
 		String[] stringArray;
 		stringArray = new String[rireki.length()];
 		String text = null;
+		int flag = 0;
+		String kekka = "";
+		String color = "";
 		for (int i = 0; i < rireki.length(); i++) {
 			char t = rireki.charAt(i);
 			//System.out.println(t);
 			//System.out.println((int)t);
 			if ((int)t == 9675) {
 				stringArray[i] = "feed"+num+"_"+(i+1)+".txt";
+				flag++;
 			} else {
 				stringArray[i] = "feed"+num+"_"+(i+1)+"_f.txt";
 			}
@@ -500,7 +534,14 @@ public class Application extends Controller {
 		}
 		text = user+"_"+num+"_"+kaisu+".txt";
 		//int kaisuu = Integer.parseInt(kaisu);
+		if (flag == rireki.length()) {
+			kekka = "合格";
+	    	color = "red";
+		} else {
+			kekka = "不合格";
+	    	color = "blue";
+		}
 		play.Logger.debug(user+" :program-"+num+"-"+kaisu);
-        return ok(program.render(user,num,kaisu,stringArray,text));
+        return ok(program.render(user,num,kaisu,stringArray,text,kekka,color));
     }
 }
