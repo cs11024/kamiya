@@ -453,6 +453,7 @@ public class Application extends Controller {
 		String testcase2[][];
 		testcase2 = new String[size][];
 		for (int i = 0; i < size; i++) {
+			//String num = filesName[i].substring(filesName[i].indexOf("_")+1, filesName[i].indexOf("."));
 			results = Data.kekka(user+"_"+(i+1)+"_");
 			testcase2[i] = new String[results.size()];
 			for (int j = 0; j < results.size(); j++) {
