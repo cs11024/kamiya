@@ -267,21 +267,17 @@ public class Application extends Controller {
 					
 					/*正解結果と学習者プログラムを比較*/
 				    String[] stringArray;
-				    String[] feedbacks;
 				    String[] testcase;
 				    StringBuilder results = new StringBuilder();
 				    File teachfile = new File(".");  
 				    File[] teachFiles = teachfile.listFiles(getFileRegexFilter("teach" + num + "_", ".txt"));
-				    File stufile = new File(".");  
+				    File stufile = new File(".");
 				    File[] stuFiles = stufile.listFiles(getFileRegexFilter("stu" + num + "_", ".txt"));
 				    stringArray = new String[teachFiles.length];
-				    feedbacks = new String[teachFiles.length];
 				    testcase = new String[testFiles.length];
 				    for (int i = 0; i < teachFiles.length; i++) {
 				    	BufferedReader br1 = null;
 				    	BufferedReader br2 = null;
-				    	//System.out.println("ファイル" + (i+1) + "→" + teachFiles[i]);
-				    	//System.out.println("ファイル" + (i+1) + "→" + stuFiles[i]);
 				    	try {
 				    		br1 = new BufferedReader(new InputStreamReader(new FileInputStream(teachFiles[i].getName())));
 				    		br2 = new BufferedReader(new InputStreamReader(new FileInputStream(stuFiles[i].getName())));
@@ -298,11 +294,9 @@ public class Application extends Controller {
 				    		String student = sb2.toString();
 				    		br1.close();
 				    		br2.close();
-						/*if (seikai.equals(kekka)) {
-							System.out.println("合格だよ");
-						} else {
-							System.out.println("不合格だよ");
-						}*/
+				    		/*System.out.println(teacher);
+				    		System.out.println("-------------------------");
+				    		System.out.println(student);*/
 				    		StringTokenizer st1 = new StringTokenizer(teacher);
 				    		int index = 0;	
 				    		while (st1.hasMoreTokens()) {
@@ -310,41 +304,17 @@ public class Application extends Controller {
 				    			if (student.indexOf(token,index) != -1 && student.indexOf(token,index) >= index) {
 				    				index = student.indexOf(token) + 1;
 				    				if (!st1.hasMoreTokens()) {
-				    					//System.out.println("合格です");
-				    					//stringArray[i] = "合格です";
 				    					stringArray[i] = "feed"+num+"_"+(i+1)+".txt";
 				    					testcase[i] = "○";
 				    					results.append("○");
 				    					rightnum++;
-				    					//データベース保存
 				    				}
 				    			} else {
-				    				//System.out.println("不合格です");
 				    				stringArray[i] = "feed"+num+"_"+(i+1)+"_f.txt";
 				    				testcase[i] = "×";
 				    				results.append("×");
-				    				//stringArray[i] = "不合格です";
 				    				BufferedReader feedbr = null;
-				    				/*try {
-				    					File feedfile = new File("feed" + num + "_" + (i + 1) +".txt");
-				    					feedbr = new BufferedReader(new FileReader(feedfile));
-				    					StringBuffer feedsb = new StringBuffer();
-							    		int feed;
-							    		while ((feed = feedbr.read()) != -1) {
-							    			feedsb.append((char) feed);
-							    		}
-							    		String feedback = feedsb.toString();				    		
-							    		feedbr.close();
-							    		System.out.println(feedback);
-							    		String crlf = System.getProperty("line.separator");
-							    		stringArray[i] = "不合格です：" +"\r\n" + feedback;
-							    		System.out.println(stringArray[i]);
-				    				} catch (FileNotFoundException e) {
-				    					System.out.println(e);
-				    				} catch (IOException e) {
-				    					System.out.println(e);
-				    				}*/
-				    				//データベース保存
+				    				break;
 				    			}
 				    		}
 				    	} catch (FileNotFoundException e) {
@@ -355,41 +325,32 @@ public class Application extends Controller {
 				    		System.out.println(e);
 				    	}
 				    }
-				    /*for (int n = 0; n < stringArray.length; n++) {   
-				    	System.out.println(stringArray[n]);
-				    }*/				    
+
 				    /*データベース登録*/
-				    //kaisu = Data.kaisuu(user+"_"+num+"_") + 1;
 				    String resultset = new String(results);
 				    Data.register(user+"_"+num+"_"+kaisu, rightnum, resultset);
-
+				    
+				    /*グラフ作成*/
 				    int seikaisu = 0;
 				    ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
 				    DefaultCategoryDataset data = new DefaultCategoryDataset();
 				    for (int i = 1; i <= kaisu; i++) {
 				    	seikaisu = Data.rightn(user+"_"+num+"_"+i);
-				    	//data.setValue(seikaisu, user, kaisu+"回目");
 				    	data.addValue(seikaisu, user, i+"");
 				    }
-				    /*data.setValue(3, "神谷", "1回目");
-				    data.setValue(2, "神谷", "2回目");
-				    data.setValue(6, "神谷", "3回目");*/
 				    JFreeChart chart = ChartFactory.createLineChart("課題"+num, "回数", "合格数", data, PlotOrientation.VERTICAL, true, false, false);
-				    
 				    CategoryPlot plot = chart.getCategoryPlot();
 				    NumberAxis numberAxis = (NumberAxis)plot.getRangeAxis();
 				    numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-				    
 				    LineAndShapeRenderer renderer = (LineAndShapeRenderer)plot.getRenderer();
 				    renderer.setSeriesShapesVisible(0, true);
-
 				    File rireki = new File("./public/images/"+user+"_"+num+".png");
 				    try {
 				    	ChartUtilities.saveChartAsPNG(rireki, chart, 400, 300);
 				    } catch (IOException e) {
 				    	e.printStackTrace();
 				    }
-					//return redirect(routes.Application.result());
+					
 				    text = user+"_"+num+"_"+kaisu+".txt";
 				    if (rightnum == teachFiles.length) {
 				    	kekka = "合格";
@@ -459,7 +420,6 @@ public class Application extends Controller {
 			for (int j = 0; j < results.size(); j++) {
 				//testcase2[i][j] = results.get(j).testcase;
 				testcase2[i][j] = Data.rireki(user+"_"+(i+1)+"_"+(j+1));
-				System.out.println(testcase2[i][j]);
 			}
 		}
 		

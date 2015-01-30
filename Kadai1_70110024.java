@@ -1,6 +1,6 @@
 import java.io.*;
 
-public class Kadai1 {
+public class Kadai1_70110024 {
 	public static void main(String args[]) throws IOException {
 		int year, month;
 		String buf;
@@ -12,7 +12,7 @@ public class Kadai1 {
 		
 		/*(-1:不正な引数, 28:閏年以外の2月の日数, 29:閏年の2月の日数, 30:4,6,9,11月の日数, 31:1,3,5,7,8,10,12月の日数)*/
 		if (year <= 0 || month <= 0 || month > 12) {
-			System.out.println(-1);;
+			System.out.println(-1);
 		} else {
 			if (month == 4 || month == 6 || month == 9 || month == 11) {
 				System.out.println(30);
