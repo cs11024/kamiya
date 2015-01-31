@@ -69,7 +69,7 @@ public class Application extends Controller {
 		String title = "Check System";
 		//session("id","kamiya");
 		String user = session("id");
-		play.Logger.debug(user+": index");
+		//play.Logger.debug(user+": index");
         return ok(index.render(title, user, form(MyForm.class)));   
     }
     
@@ -98,16 +98,16 @@ public class Application extends Controller {
 		/*前作ったフォームを送るやつ*/
 		String title = "Check System Send Form";
 		String user = session("id");
-		play.Logger.debug("sendform: "+user);
+		//play.Logger.debug("sendform: "+user);
 		Form<MyForm> form = form(MyForm.class).bindFromRequest();
 		if (form.hasErrors()) {
 			String msg = "入力に問題があります。";
-			play.Logger.debug(user+": index");
+			//play.Logger.debug(user+": index");
 			return badRequest(index.render(title, user, form));
 		} else {
 			MyForm data = form.get();
 			String msg = data.toString();
-			play.Logger.debug(user+": index");
+			//play.Logger.debug(user+": index");
 			return ok(index.render(title, user, form));
 		}
 	}
@@ -133,7 +133,7 @@ public class Application extends Controller {
 	
 	public static Result checker() {
 		String user = session("id");
-		play.Logger.debug("checker: "+user);
+		play.Logger.debug(user+": checker");
 		MultipartFormData body = request().body().asMultipartFormData();
 		FilePart checkf = body.getFile("checkf");
 		String kadai = body.asFormUrlEncoded().get("kadai")[0];
@@ -202,6 +202,7 @@ public class Application extends Controller {
 					
 					/*学習者プログラムをコンパイル*/
 					ProcessBuilder compile = new ProcessBuilder("javac", fileName);
+					//ProcessBuilder compile = new ProcessBuilder("/bin/sh", "-c", "javac", fileName);
 					//compile.redirectErrorStream(true);
 					try {
 						Process processc = compile.start();
@@ -233,6 +234,7 @@ public class Application extends Controller {
 				    for (int i = 0; i < testFiles.length; i++) {
 				    	//System.out.println("ファイル" + (in+1) + "→" + testFiles[in]);
 				    	ProcessBuilder exec = new ProcessBuilder("cmd", "/c", "java", fname, "<", testFiles[i].getName(), ">", "stu"+ num +"_"+ (i+1) +".txt");
+				    	//ProcessBuilder exec = new ProcessBuilder("/bin/sh", "-c", "java", fname, "<", testFiles[i].getName(), ">", "stu"+ num +"_"+ (i+1) +".txt");
 				    	try {
 				    		Process processe = exec.start();
 				    		InputStream stdIn = processe.getInputStream();
@@ -360,7 +362,7 @@ public class Application extends Controller {
 				    	color = "blue";
 				    }
 				    
-				    play.Logger.debug(user+" :result-"+num+"-"+kaisu);
+				    play.Logger.debug(user+" :result("+num+"-"+kaisu+")");
 					return ok(result.render(user,num,kaisu,stringArray,text,kekka,color));
 				}
 				flash("error", "ファイルない");
@@ -502,7 +504,7 @@ public class Application extends Controller {
 			kekka = "不合格";
 	    	color = "blue";
 		}
-		play.Logger.debug(user+" :program-"+num+"-"+kaisu);
+		play.Logger.debug(user+" :program("+num+"-"+kaisu+")");
         return ok(program.render(user,num,kaisu,stringArray,text,kekka,color));
     }
 }
