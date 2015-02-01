@@ -69,7 +69,7 @@ public class Application extends Controller {
 		String title = "Check System";
 		//session("id","kamiya");
 		String user = session("id");
-		//play.Logger.debug(user+": index");
+		play.Logger.debug(user+": index");
         return ok(index.render(title, user, form(MyForm.class)));   
     }
     
@@ -362,19 +362,19 @@ public class Application extends Controller {
 				    	color = "blue";
 				    }
 				    
-				    play.Logger.debug(user+" :result("+num+"-"+kaisu+")");
+				    play.Logger.debug(user+": result("+num+"-"+kaisu+")");
 					return ok(result.render(user,num,kaisu,stringArray,text,kekka,color));
 				}
 				flash("error", "ファイルない");
-				play.Logger.debug(user+" :index error ( "+num+" )");
+				play.Logger.debug(user+": index error ( "+num+" )");
 				return redirect(routes.Application.index());
 			}
 			flash("error", "ファイルない");
-			play.Logger.debug(user+" :index error ( "+num+" )");
+			play.Logger.debug(user+": index error ( "+num+" )");
 			return redirect(routes.Application.index());
 		}
 		flash("error", "ファイルない");
-		play.Logger.debug(user+" :index error ( "+num+" )");
+		play.Logger.debug(user+": index error ( "+num+" )");
 		return redirect(routes.Application.index());    
 	}
 	
@@ -392,7 +392,7 @@ public class Application extends Controller {
 		String kekka = "";
 		String color = "";
 		//feedbacks = new String[5];
-		play.Logger.debug(user+" :result");
+		play.Logger.debug(user+": result");
         return ok(result.render(user,num,kaisu,stringArray,text,kekka,color));
     }
 	
@@ -444,7 +444,7 @@ public class Application extends Controller {
 				System.out.println(testcase2[i][j]);
 			}
 		}*/
-		play.Logger.debug(user+" :record");
+		play.Logger.debug(user+": record");
         return ok(record.render(title, user, size, filesName, testcase2));
     }
 	
@@ -504,7 +504,7 @@ public class Application extends Controller {
 			kekka = "不合格";
 	    	color = "blue";
 		}
-		play.Logger.debug(user+" :program("+num+"-"+kaisu+")");
+		play.Logger.debug(user+": program("+num+"-"+kaisu+")");
         return ok(program.render(user,num,kaisu,stringArray,text,kekka,color));
     }
 }
