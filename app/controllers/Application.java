@@ -201,12 +201,16 @@ public class Application extends Controller {
 					}
 					
 					/*学習者プログラムをコンパイル*/
+					System.out.println(fileName);
 					ProcessBuilder compile = new ProcessBuilder("javac", fileName);
 					//ProcessBuilder compile = new ProcessBuilder("/bin/sh", "-c", "javac", fileName);
 					//compile.redirectErrorStream(true);
 					try {
 						Process processc = compile.start();
-						processc.waitFor();
+						int exit = processc.waitFor();
+						if (exit != 0) {
+							System.out.println("Javac失敗");
+						}
 						/*int ret = processc.exitValue();
 						if (ret != 0) {
 							System.out.println("uoooooooooooo");
