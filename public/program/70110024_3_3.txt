@@ -1,0 +1,35 @@
+import java.io.*;
+
+class Test_FallInt {
+public static void main(String args[]){
+
+int x,y,x_speed,y_speed;
+int g;
+String buf;
+
+x_speed = 800;//水平速度(初期値)
+g=-10;
+x=0;
+y=100000;//高度
+y_speed =0;
+
+System.out.print("水平方向に飛ぶ物体の速度メートル毎秒を入力してください\n");
+try{
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+    buf = br.readLine();
+    x_speed = Integer.parseInt(buf);
+} catch(Exception e){
+    System.out.print("Error:" + e);
+}
+
+while(y>=0){
+y_speed = y_speed + g;
+x = x + x_speed;
+y = y + y_speed;
+}
+System.out.print("estimated distance=" + x + "\n");
+
+return;
+}
+}
