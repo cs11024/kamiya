@@ -1,0 +1,34 @@
+import java.io.*;
+
+class Test_FallInt {
+ public static void main(String args[]) {
+  int x,y,x_speed,y_speed;
+  int g;
+
+ String buf;
+try{
+BufferedReader br
+= new BufferedReader(new InputStreamReader(System.in));
+buf = br.readLine();
+x_speed = Integer.parseInt(buf);
+
+  g = -10;
+
+  x = 0;
+  y = 100000;
+  y_speed = 0;
+
+  while( y >= 0 ) {
+   y_speed = y_speed + g;
+   x = x + x_speed;
+   y = y + y_speed;
+ }
+  System.out.print("estimated distance = " + x + "\n");
+
+    } catch(Exception e) {
+      System.out.print("Error:" + e);
+
+  return;
+   }
+ }
+}

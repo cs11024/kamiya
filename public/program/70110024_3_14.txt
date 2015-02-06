@@ -1,0 +1,42 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author cs14103
+ */
+
+import java.util.Scanner;
+
+    class Test_FallInt {
+    
+        public static void main(String args[]) {
+            Scanner stdIn = new Scanner(System.in);
+    
+            int x, y, x_speed, y_speed;
+            int g;
+ 
+            g = -10;
+    
+            x = 0;
+            y = 100000;
+          //x_speed = 800;
+            
+            System.out.print("水平方向の速度を指定してください：");
+            x_speed = stdIn.nextInt();
+            
+            y_speed = 0;
+    
+            while( y >= 0 ) {
+            y_speed = y_speed + g;
+            x = x + x_speed;
+            y = y + y_speed;
+            }
+            System.out.print("estimated distance = " + x + "\n");
+            return;
+        }
+    }
+

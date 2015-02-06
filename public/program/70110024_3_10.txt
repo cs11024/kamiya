@@ -1,0 +1,22 @@
+import java.util.Scanner;
+class Test_FallInt{
+    public static void main(String args[]){
+	Scanner stdIn=new Scanner(System.in);
+	int x,y,y_speed;
+	int g;
+	int x_speed = stdIn.nextInt();
+	g=-10;
+	x=0;
+	y=100000;
+        y_speed=0;
+
+	while(y>=0){
+	    y_speed=y_speed+g;
+	    x=x+x_speed;
+	    y=y+y_speed;
+	}
+	System.out.print("estimated distance="+x+"\n");
+	
+	return;
+    }
+}
