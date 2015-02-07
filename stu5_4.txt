@@ -1,1 +1,1 @@
-Wind speed = estimated distance = 1483908.360592743
+estimated distance = 141642.41797648216

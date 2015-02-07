@@ -1,0 +1,84 @@
+import java.io.*;
+
+public class Test_FallInWind2 {
+  public static void main(String args[]) {
+    double x, y, x_speed, y_speed, x_initial_speed, x_wind_speed1;
+    double r;
+    double g;
+
+    double m;
+
+    String buf;
+
+    g = -9.80665;
+
+    x = 0;
+    y = 100000;
+    x_initial_speed = 800;
+    x_wind_speed1 = 200;
+
+    x_speed = x_initial_speed;
+    y_speed = 0;
+
+    r = 100000;
+
+    try{
+      BufferedReader br
+        = new BufferedReader(new InputStreamReader(System.in));
+
+      System.err.print("x_wind_speed1 = ");
+      buf = br.readLine();
+      x_wind_speed1 = Double.parseDouble(buf);
+
+    } catch(Exception e) {
+      System.err.print("Error:" + e);
+    }
+
+    m = x_wind_speed1;
+
+    while( y >= 0 ) {
+      y_speed += g/r;
+      if( y > 8000 ) {
+        x_speed = x_initial_speed + x_wind_speed1;
+      } else {
+        x_speed = x_initial_speed;
+      }
+
+      x += x_speed/r;
+      y += y_speed/r;
+    }
+    System.out.print("estimated distance = "+x+"\n");
+
+
+    x = 0;
+    y = 100000;
+    x_wind_speed1 = m;
+
+    x_speed = x_initial_speed;
+    y_speed = 0;
+
+    g = (int)(g);
+    x = (int)(x);
+    y = (int)(y);
+    x_initial_speed = (int)(x_initial_speed);
+    x_wind_speed1 = (int)(x_wind_speed1);
+    x_speed = (int)(x_speed);
+    y_speed = (int)(y_speed);
+
+    while( y >= 0 ) {
+      y_speed += g;
+      if( y > 8000 ) {
+        x_speed = x_initial_speed + x_wind_speed1;
+      } else {
+        x_speed = x_initial_speed;
+      }
+
+      x += x_speed;
+      y += y_speed;
+    }
+
+    System.out.print("estimated distance is approximately " + x + "[m]" + "\n");
+ 
+    return;
+  }
+}

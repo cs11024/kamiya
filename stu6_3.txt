@@ -1,2 +1,2 @@
-141642.41797648216
-141600
+wind speed = estimated distance = 141642.41797648216
+estimated distance is approximately 141642[m]

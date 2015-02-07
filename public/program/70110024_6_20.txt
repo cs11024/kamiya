@@ -1,0 +1,45 @@
+import java.util.Scanner;
+
+public class Test_FallInWind2 {
+   public static void main(String args[]) {
+      Scanner stdIn = new Scanner(System.in);
+      double x, y, x_speed, y_speed, x_initial_speed;
+      double r;
+      double g;
+      int X;
+
+      g = -9.80665;
+
+      x = 0;
+      y = 100000;
+      x_initial_speed = 800;
+      
+      System.out.print("必勝物体の水平方向に対しての風の速度 : ");
+      double x_wind_speed1 = stdIn.nextDouble();
+
+      x_speed = x_initial_speed;
+      y_speed = 0;
+
+      r = 100000;
+
+      while( y >= 0 ) {
+         y_speed += g/r;
+         if( y > 8000 ) {
+             x_speed = x_initial_speed + x_wind_speed1;
+         } else {
+             x_speed = x_initial_speed;
+         }
+
+         x += x_speed/r;
+         y += y_speed/r;
+     }
+     System.out.print("estimated distance = "+x+"\n");
+     X = (int)(x);
+     System.out.print("estimated distance is approximatelyn = "+X/100*100+"[m]"+"\n");
+
+     return;
+   }
+}
+
+
+

@@ -1,1 +1,1 @@
-estimated distance = 113154.85055654454
+estimated distance = 113137.08801937905
